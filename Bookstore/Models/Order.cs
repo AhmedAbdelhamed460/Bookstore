@@ -12,13 +12,14 @@ namespace Bookstore.Models
         public double Shopingcost { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime shopingDate { get; set; }
+        public DateTime ShopingDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime arrivalDate { get; set; }
-        public double discount { get; set; }
-        [ForeignKey("Customer")]
-        public int customerId { get; set; }
-        public virtual Customer Customer { get; set; }
+        public DateTime ArrivalDate { get; set; }
+        public double Discount { get; set; }
+
+        [ForeignKey("AppUser")]
+        public string AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
 
 
     }

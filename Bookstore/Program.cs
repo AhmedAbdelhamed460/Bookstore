@@ -1,4 +1,5 @@
 using Bookstore.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -9,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<applicationdbcontext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("default")));
+builder.Services.AddDbContext<BookStoreDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("default")));
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<BookStoreDbContext>();
 builder.Services.AddCors();
 builder.Services.AddSwaggerGen();
 
@@ -26,7 +29,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

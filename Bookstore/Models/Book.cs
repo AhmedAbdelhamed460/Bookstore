@@ -5,7 +5,7 @@ namespace Bookstore.Models
 {
     public class Book
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         [StringLength(200)]
         public string Describtion { get; set; }
         [StringLength(200)]
@@ -28,15 +28,17 @@ namespace Bookstore.Models
         //public int Book_N { get; set; }
 
         //relation 
-        [ForeignKey("author")]
-        public int AuthorID { get; set; }
-        public virtual Author? author { get; set; }
-        [ForeignKey("category")]
-        public int CategoryID { get; set; }
-        public virtual category category { get; set; }
-        [ForeignKey("publisher")]
-        public int PublisherID { get; set; }
-        public virtual Publisher publisher { get; set; }
+        [ForeignKey("Author")]
+        public int authorID { get; set; }
+        public virtual Author? Author { get; set; }
+
+        [ForeignKey("Category")]
+        public int categoryID { get; set; }
+        public virtual Category Category { get; set; }
+
+        [ForeignKey("Publisher")]
+        public int publisherID { get; set; }
+        public virtual Publisher Publisher { get; set; }
 
         public virtual List<Review> Reviews { get; set; } = new List<Review>();
        

@@ -7,9 +7,9 @@ namespace Bookstore.Models
     {
         public int Id { get; set; }
         [StringLength(50)]
-        public string firstname { get; set; }
+        public string Firstname { get; set; }
         [StringLength(50)]
-        public string lastname { get; set; }
+        public string Lastname { get; set; }
         [StringLength(200)]
         public string Image { get; set; }
        
