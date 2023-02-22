@@ -30,7 +30,7 @@ namespace Bookstore.Reposiotries
             return dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).SingleOrDefaultAsync(b => b.Title == title);
         }
 
-        public  int add(Book book)
+        public int add(Book book)
         {
             try
             {
@@ -42,6 +42,12 @@ namespace Bookstore.Reposiotries
                 return -1;
             }
         }
+
+        //public Task add(Book book)
+        //{  
+        //        dbContext.Books.AddAsync(book);
+        //        return dbContext.SaveChangesAsync();
+        //}
         public int edit(Book book)
         {
             try

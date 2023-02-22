@@ -62,9 +62,65 @@ namespace Bookstore.Controllers
                     Publisher = book.Publisher.Name
                 };
 
-                return Ok(book);
+                return Ok(bookDTO);
             }
             else return NotFound();
         }
+        [HttpGet("/api/bookname/{name}")]
+        public async Task<ActionResult> getByName(string name)
+        {
+            Book? book = await bookRepo.getByName(name);
+            if (book != null)
+            {
+                BookDTO bookDTO = new BookDTO()
+                {
+                    Title = book.Title,
+                    Description = book.Describtion,
+                    Image = book.Image,
+                    Price = book.Price,
+                    Page = book.Page,
+                    PublisherDate = book.PublisherDate,
+                    Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                    Category = book.Category.Name,
+                    Publisher = book.Publisher.Name
+                };
+
+                return Ok(bookDTO);
+            }
+            else return NotFound();
+        }
+
+        [HttpPost]
+        public ActionResult add(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    bookRepo.add(book);
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
+                    return Ok(bookDTO);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+
+                }
+            }
+            else return BadRequest();
+        }
+
     }
 }
