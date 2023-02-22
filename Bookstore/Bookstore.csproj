@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="DOT\" />
+    <Folder Include="Reposiotries\" />
   </ItemGroup>
 
 </Project>

@@ -7,18 +7,20 @@ namespace Bookstore.Models
     {
         public int Id { get; set; }
         public double Rateing { get; set; }
+
         [DataType(DataType.Date)]
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
 
         [MaxLength(200)]
-        public string review { get; set; }
+        public string ReviewText { get; set; }
 
         [ForeignKey("Book")]
         public int bookID { get; set; }
         public virtual Book Book { get; set; }
-        [ForeignKey("Customer")]
-        public int customerId { get; set; }
-        public virtual Customer Customer { get; set; }
+
+        [ForeignKey("AppUser")]
+        public string AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
         
     }
 }

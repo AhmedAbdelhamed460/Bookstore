@@ -7,9 +7,9 @@ namespace Bookstore.Models
         //need copmosit PK of This 2 FK : Fluent Api =>   modelBuilder.Entity<ShopingCart>().HasKey("customrId", "bookId");
         public int Amount { get; set; }
 
-        [ForeignKey("Customer")]
-        public int customrId { get; set; }
-        public virtual Customer Customer { get; set; }
+        [ForeignKey("AppUser")]
+        public string AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
 
         [ForeignKey("Book")]
         public int bookId { get; set; }
