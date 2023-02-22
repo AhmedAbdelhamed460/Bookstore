@@ -34,13 +34,13 @@ namespace Bookstore.Models
 
         [ForeignKey("Category")]
         public int categoryID { get; set; }
-        public virtual Category Category { get; set; }
+        public virtual Category? Category { get; set; }
 
         [ForeignKey("Publisher")]
         public int publisherID { get; set; }
-        public virtual Publisher Publisher { get; set; }
+        public virtual Publisher? Publisher { get; set; }
 
-        public virtual List<Review> Reviews { get; set; } = new List<Review>();
+        public virtual List<Review>? Reviews { get; set; } = new List<Review>();
        
         
 

@@ -30,17 +30,10 @@ namespace Bookstore.Reposiotries
             return dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).SingleOrDefaultAsync(b => b.Title == title);
         }
 
-        public int add(Book book)
+        public async Task add(Book book)
         {
-            try
-            {
-                dbContext.Books.Add(book);
-                return dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                return -1;
-            }
+                await dbContext.Books.AddAsync(book);
+                await dbContext.SaveChangesAsync();          
         }
 
         //public Task add(Book book)

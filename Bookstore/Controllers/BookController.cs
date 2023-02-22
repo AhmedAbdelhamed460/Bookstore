@@ -91,14 +91,15 @@ namespace Bookstore.Controllers
         }
 
         [HttpPost]
-        public ActionResult add(Book book)
+        public async Task<ActionResult> add(Book book)
         {
             if (ModelState.IsValid)
             {
 
                 try
                 {
-                    bookRepo.add(book);
+                    await bookRepo.add(book);
+                    book = await bookRepo.getById(book.Id);
                     BookDTO bookDTO = new BookDTO()
                     {
                         Title = book.Title,
