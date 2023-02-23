@@ -8,7 +8,7 @@ namespace Bookstore.Models
         public int Id { get; set; }
         public double Rateing { get; set; }
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "date")]
         public DateTime Date { get; set; }
 
         [MaxLength(200)]
@@ -19,7 +19,7 @@ namespace Bookstore.Models
         public virtual Book Book { get; set; }
 
         [ForeignKey("AppUser")]
-        public string AppUserId { get; set; }
+        public string? AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
         
     }

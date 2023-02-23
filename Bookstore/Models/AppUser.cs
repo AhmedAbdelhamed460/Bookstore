@@ -6,7 +6,7 @@ namespace Bookstore.Models
 {
     public class AppUser: IdentityUser
     {
-
+       
         [MaxLength(50)]
         public string firstName { get; set; }
 

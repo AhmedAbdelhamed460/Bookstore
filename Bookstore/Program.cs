@@ -1,4 +1,5 @@
 using Bookstore.Models;
+using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<BookStoreDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("default")));
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<BookStoreDbContext>();
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>(); //Ingect IReviewRepo
 builder.Services.AddCors();
 builder.Services.AddSwaggerGen();
 
