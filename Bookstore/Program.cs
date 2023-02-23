@@ -1,4 +1,5 @@
 using Bookstore.Models;
+using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,8 +12,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<BookStoreDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("default")));
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+
+builder.Services.AddIdentity<AppUser, IdentityRole>() //Identity
     .AddEntityFrameworkStores<BookStoreDbContext>();
+builder.Services.Configure<IdentityOptions>(opts =>
+{
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.Password.RequireDigit = false;
+    opts.Password.RequireLowercase = false;
+    opts.Password.RequireUppercase = false;
+    opts.Password.RequiredLength = 3;
+});
+
+builder.Services.AddScoped<IBookRepo, BookRepo>(); //Ingect IBookRepo
+
 builder.Services.AddCors();
 builder.Services.AddSwaggerGen();
 
