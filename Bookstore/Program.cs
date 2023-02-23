@@ -15,6 +15,14 @@ builder.Services.AddDbContext<BookStoreDbContext>(option => option.UseSqlServer(
 
 builder.Services.AddIdentity<AppUser, IdentityRole>() //Identity
     .AddEntityFrameworkStores<BookStoreDbContext>();
+builder.Services.Configure<IdentityOptions>(opts =>
+{
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.Password.RequireDigit = false;
+    opts.Password.RequireLowercase = false;
+    opts.Password.RequireUppercase = false;
+    opts.Password.RequiredLength = 3;
+});
 
 builder.Services.AddScoped<IBookRepo, BookRepo>(); //Ingect IBookRepo
 

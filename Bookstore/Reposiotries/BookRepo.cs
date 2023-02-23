@@ -15,19 +15,19 @@ namespace Bookstore.Reposiotries
         {
             this.dbContext = dbContext;
         }
-        public Task<List<Book>> getAll()
+        public async Task<List<Book>> getAll()
         {
-            return dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).ToListAsync();
+            return await dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).ToListAsync();
 
         }
 
-        public Task<Book?> getById(int id)
+        public async Task<Book?> getById(int id)
         {
-            return dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).SingleOrDefaultAsync(b => b.Id == id);
+            return await dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).SingleOrDefaultAsync(b => b.Id == id);
         }
-        public Task<Book?> getByName(string title)
+        public async Task<Book?> getByName(string title)
         {
-            return dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).SingleOrDefaultAsync(b => b.Title == title);
+            return await dbContext.Books.Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).SingleOrDefaultAsync(b => b.Title == title);
         }
 
         public async Task add(Book book)
@@ -41,17 +41,10 @@ namespace Bookstore.Reposiotries
         //        dbContext.Books.AddAsync(book);
         //        return dbContext.SaveChangesAsync();
         //}
-        public int edit(Book book)
-        {
-            try
-            {
-                dbContext.Entry(book).State = EntityState.Modified;
-                return dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                return -1;
-            }
+        public async Task edit(Book book)
+        {   
+              dbContext.Entry(book).State = EntityState.Modified;
+              await dbContext.SaveChangesAsync();
         }
     }
 }

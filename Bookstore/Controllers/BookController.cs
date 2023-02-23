@@ -27,6 +27,7 @@ namespace Bookstore.Controllers
                 {
                     bookDTOs.Add(new BookDTO()
                     {
+                        Id = book.Id,
                         Title = book.Title,
                         Description = book.Describtion,
                         Image = book.Image,
@@ -51,6 +52,7 @@ namespace Bookstore.Controllers
             {
                 BookDTO bookDTO = new BookDTO()
                 {
+                    Id = book.Id,
                     Title = book.Title,
                     Description = book.Describtion,
                     Image = book.Image,
@@ -74,6 +76,7 @@ namespace Bookstore.Controllers
             {
                 BookDTO bookDTO = new BookDTO()
                 {
+                    Id = book.Id,
                     Title = book.Title,
                     Description = book.Describtion,
                     Image = book.Image,
@@ -99,6 +102,40 @@ namespace Bookstore.Controllers
                 try
                 {
                     await bookRepo.add(book);
+                    book = await bookRepo.getById(book.Id);
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
+                    return Ok(bookDTO);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+
+                }
+            }
+            else return BadRequest();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    await bookRepo.edit(book);
                     book = await bookRepo.getById(book.Id);
                     BookDTO bookDTO = new BookDTO()
                     {
