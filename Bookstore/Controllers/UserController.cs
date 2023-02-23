@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Bookstore.Controllers
 {
@@ -39,5 +42,39 @@ namespace Bookstore.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost("/api/userlogin")]
+        public async Task<ActionResult> Login(LoginDTO loginDTO)
+        {
+                AppUser? user = await userManager.FindByEmailAsync(loginDTO.Email);
+                if (user != null)
+                {
+                    bool valid = await userManager.CheckPasswordAsync(user, loginDTO.Password);
+                    if (valid)
+                    {
+                        // await signInManager.SignInAsync(user, loginVM.RememberMe);
+                        //List<Claim> claims = new List<Claim>()
+                        //{
+                        //    new Claim("Address",user.Address),
+                        //    new Claim("Age",user.Age.ToString())
+                        //};
+
+                        //Generate Token
+                        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my_secret_key_123456"));
+                        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+                        var token = new JwtSecurityToken(
+                        expires: DateTime.Now.AddMinutes(120),
+                        signingCredentials: credentials);
+
+                        return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+
+                    }
+                    else return Unauthorized();
+                }
+             return Unauthorized();
+
+        }
     }
 }
+
