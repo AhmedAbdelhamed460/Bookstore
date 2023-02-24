@@ -29,5 +29,6 @@ namespace Bookstore.Models
        
         public virtual List<Order>? Order { get; set; }= new List<Order>();
         public virtual Review? Review { get; set; }
+
     }
 }

@@ -19,8 +19,8 @@ namespace Bookstore.Models
         public virtual Book Book { get; set; }
 
         [ForeignKey("AppUser")]
-        public string AppUserId { get; set; }
+        public string appUserID { get; set; }
         public virtual AppUser AppUser { get; set; }
-        
+
     }
 }

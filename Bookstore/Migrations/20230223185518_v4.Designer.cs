@@ -4,6 +4,7 @@ using Bookstore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookstore.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class applicationdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20230223185518_v4")]
+    partial class v4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,17 +299,10 @@ namespace Bookstore.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("appUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("bookID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("appUserID")
-                        .IsUnique();
 
                     b.HasIndex("bookID");
 
@@ -523,19 +519,11 @@ namespace Bookstore.Migrations
 
             modelBuilder.Entity("Bookstore.Models.Review", b =>
                 {
-                    b.HasOne("Bookstore.Models.AppUser", "AppUser")
-                        .WithOne("Review")
-                        .HasForeignKey("Bookstore.Models.Review", "appUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Bookstore.Models.Book", "Book")
                         .WithMany("Reviews")
                         .HasForeignKey("bookID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Book");
                 });
@@ -613,8 +601,6 @@ namespace Bookstore.Migrations
             modelBuilder.Entity("Bookstore.Models.AppUser", b =>
                 {
                     b.Navigation("Order");
-
-                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Author", b =>

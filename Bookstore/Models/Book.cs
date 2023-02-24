@@ -41,8 +41,7 @@ namespace Bookstore.Models
         public virtual Publisher? Publisher { get; set; }
 
         public virtual List<Review>? Reviews { get; set; } = new List<Review>();
-       
-        
+        public virtual List<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();
 
     }
 }
