@@ -28,7 +28,8 @@ namespace Bookstore.Controllers
             if (ModelState.IsValid)
             {
                 AppUser user = new()
-                {   firstName = registrationDTO.FirstName,
+                {
+                    firstName = registrationDTO.FirstName,
                     LastName = registrationDTO.LastName,
                     UserName = registrationDTO.UserName,
                     Email = registrationDTO.Email,

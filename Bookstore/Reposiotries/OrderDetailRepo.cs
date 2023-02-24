@@ -14,11 +14,7 @@ namespace Bookstore.Reposiotries
         }
 
         public async Task<List<OrdersPerUser>> getOrdersPerUser(string id)
-        {
-            //var oredDetails = dbContext.orderDetails.Include(od => od.Book).Include(od => od.Order)
-            //               .Where(od=> od.Order.AppUserId == id)
-            //               .GroupBy(od => od.orderId, od=> od.bookId
-            //                       (key, g) => new { PersonId = key, Books = g.To });
+        { 
 
             var orderDetails = await (from o in dbContext.orderDetails
                                 where o.Order.AppUserId == id
