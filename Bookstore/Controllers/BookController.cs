@@ -160,16 +160,37 @@ namespace Bookstore.Controllers
         }
 
         [HttpGet("/api/bookBestSeller")]
-        public ActionResult getBestSeller()
+        public async Task<ActionResult> getBestSellerAsync()
         {
-            List<Book> books = bookRepo.getBestSeller();
-          
-            if (books != null)
+            //List<Book> books = bookRepo.getBestSeller();
+
+            List<OrderDetailDTO> orderDetailDTOs = bookRepo.getBestSeller();
+            List<BookDTO> bookDTOs = new List<BookDTO>();
+            if (orderDetailDTOs != null)
             {
-                return Ok(books);
+                for (int i = 0; i < 2; i++)
+                {
+                    Book? book = await bookRepo.getById(orderDetailDTOs[i].BookID);
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
+                    bookDTOs.Add(bookDTO);
+                }
+               return Ok(bookDTOs);
             }
-            else return NotFound();
+            else return NotFound();           
         }
+
 
     }
 }
