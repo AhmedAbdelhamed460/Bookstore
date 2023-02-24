@@ -21,6 +21,6 @@ namespace Bookstore.Models
         public string AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
 
-
+        public virtual List<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

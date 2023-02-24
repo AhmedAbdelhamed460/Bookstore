@@ -1,9 +1,8 @@
 ﻿using Bookstore.DOT;
 using Bookstore.Models;
-using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Bookstore.Reposiotries;
 namespace Bookstore.Controllers
 {
     [Route("api/[controller]")]
@@ -158,6 +157,18 @@ namespace Bookstore.Controllers
                 }
             }
             else return BadRequest();
+        }
+
+        [HttpGet("/api/bookBestSeller")]
+        public ActionResult getBestSeller()
+        {
+            List<Book> books = bookRepo.getBestSeller();
+          
+            if (books != null)
+            {
+                return Ok(books);
+            }
+            else return NotFound();
         }
 
     }
