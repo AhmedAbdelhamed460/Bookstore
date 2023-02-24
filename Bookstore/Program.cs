@@ -41,6 +41,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 builder.Services.AddScoped<IBookRepo, BookRepo>(); //Ingect IBookRepo
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>(); //Ingect IReviewRepo
+
 
 builder.Services.AddCors();
 builder.Services.AddSwaggerGen();
