@@ -1,4 +1,7 @@
+using Bookstore.Interfaces;
 using Bookstore.Models;
+using Bookstore.Reposiotries;
+using Bookstore.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,7 +18,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<BookStoreDbContext>();
 builder.Services.AddCors();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,21 +1,20 @@
-﻿
+﻿using Bookstore.Models;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace Bookstore.Models
+namespace Bookstore.DOT
 {
-    public class Author
+    public class AuthorBookDTO
     {
-        public int Id { get; set; }
-        [StringLength(50)]
+        public int authorId { get; set; }
         public string Firstname { get; set; }
-        [StringLength(50)]
+
         public string Lastname { get; set; }
-        [StringLength(200)]
+        public IFormFile ImageText { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public string Image { get; set; }
         public string Bio { get; set; }
         public bool Top { get; set; }
-        public virtual List<Book>? Books { get; set; }=new List<Book>();
+        public List<string>bookName{ get; set; }=new List<string>();
     }
 }

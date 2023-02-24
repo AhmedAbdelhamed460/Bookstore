@@ -129,6 +129,9 @@ namespace Bookstore.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("Top")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
