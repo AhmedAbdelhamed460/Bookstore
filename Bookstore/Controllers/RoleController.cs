@@ -22,12 +22,8 @@ namespace Bookstore.Controllers
         {
             List<IdentityRole> roles = await roleManager.Roles.ToListAsync();
             List<RoleDTO> roleDTOs = new List<RoleDTO>();
-            if (roles.Count != 0) 
-            {
-            } return Ok(roles);
+            if (roles.Count != 0) return Ok(roles);
             else return NotFound();
-
-
         }
 
         [HttpPost]

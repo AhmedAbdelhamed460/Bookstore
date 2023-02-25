@@ -21,6 +21,13 @@ namespace Bookstore.Controllers
             this.userManager = userManager;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> getAllUsers()
+        {
+            List<AppUser> users = await userManager.Users.ToListAsync();
+            if (users.Count != 0) return Ok(users);
+            else return NotFound();
+        }
 
         [HttpPost]
         public async Task<ActionResult> Registration(RegistrationDTO registrationDTO)
@@ -36,9 +43,13 @@ namespace Bookstore.Controllers
                     PhoneNumber = registrationDTO.PhoneNumber,
                     Address = registrationDTO.Address             
                 };
-                IdentityResult result = await userManager.CreateAsync(user, registrationDTO.Password);
+                IdentityResult addUserResult = await userManager.CreateAsync(user, registrationDTO.Password);
+                IdentityResult addRoleToUserResult = await userManager.AddToRoleAsync(user, "Customer");
                 registrationDTO.Id = user.Id;
-                if (result.Succeeded) return Ok(registrationDTO);
+                if (addUserResult.Succeeded && addRoleToUserResult.Succeeded) 
+                {
+                    return Ok(registrationDTO);
+                } 
                 else return BadRequest();
             }
             return BadRequest();
@@ -76,6 +87,37 @@ namespace Bookstore.Controllers
              return Unauthorized();
 
         }
+
+        [HttpPost("/api/userToRole")]
+        public async Task<ActionResult> addRoleToUser(RoleToUserDTO roleToUserDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var userId in roleToUserDTO.UserIds)
+                {
+                    AppUser user = await userManager.FindByIdAsync(userId);
+                    IdentityResult result = await userManager.AddToRolesAsync(user , roleToUserDTO.RoleNames);
+                    if (result.Succeeded == false)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return BadRequest();
+                    }                                     
+                }
+                return Ok(roleToUserDTO);
+            }
+            return BadRequest();
+        }
+        [HttpGet("/api/userProfile")]
+       
+        public ActionResult profile()
+        {
+           var str =  User.Identity.IsAuthenticated;
+           return Ok();
+        }
+
     }
 }
 

@@ -13,6 +13,5 @@
         public string Publisher { get; set; }
         public string Category { get; set; }
 
-
     }
 }
