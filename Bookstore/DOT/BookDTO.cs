@@ -15,6 +15,5 @@
         public int PublisherID { get; set; }
         public int CategoryID { get; set; }
 
-
     }
 }
