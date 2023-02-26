@@ -4,6 +4,7 @@ using Bookstore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookstore.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class applicationdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20230225180709_addposter")]
+    partial class addposter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,7 +134,7 @@ namespace Bookstore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Book", b =>
@@ -149,6 +152,10 @@ namespace Bookstore.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Page")
                         .HasColumnType("int");
@@ -184,7 +191,7 @@ namespace Bookstore.Migrations
 
                     b.HasIndex("publisherID");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Category", b =>
@@ -201,7 +208,7 @@ namespace Bookstore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorys", (string)null);
+                    b.ToTable("Categorys");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Order", b =>
@@ -232,7 +239,7 @@ namespace Bookstore.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Bookstore.Models.OrderDetail", b =>
@@ -253,7 +260,7 @@ namespace Bookstore.Migrations
 
                     b.HasIndex("bookId");
 
-                    b.ToTable("orderDetails", (string)null);
+                    b.ToTable("orderDetails");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Publisher", b =>
@@ -276,7 +283,7 @@ namespace Bookstore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Publishers", (string)null);
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Review", b =>
@@ -312,7 +319,7 @@ namespace Bookstore.Migrations
 
                     b.HasIndex("bookID");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Bookstore.Models.ShopingCart", b =>
@@ -330,7 +337,7 @@ namespace Bookstore.Migrations
 
                     b.HasIndex("bookId");
 
-                    b.ToTable("shopingCarts", (string)null);
+                    b.ToTable("shopingCarts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -30,14 +30,16 @@ namespace Bookstore.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.DropForeignKey(
-                name: "FK_Reviews_AspNetUsers_appUserID",
-                table: "Reviews");
+              name: "FK_Reviews_AspNetUsers_appUserID",
+              table: "Reviews");
 
             migrationBuilder.DropIndex(
                 name: "IX_Reviews_appUserID",
@@ -46,6 +48,7 @@ namespace Bookstore.Migrations
             migrationBuilder.DropColumn(
                 name: "appUserID",
                 table: "Reviews");
+
         }
     }
 }

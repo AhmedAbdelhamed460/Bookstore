@@ -8,8 +8,8 @@ namespace Bookstore.Models
         public int Id { get; set; }
         [StringLength(200)]
         public string Describtion { get; set; }
-        [StringLength(200)]
-        public string Image { get; set; }
+
+       
         [StringLength(50)]
         public string? Title { get; set; }
         [Column(TypeName ="money")]
@@ -24,9 +24,11 @@ namespace Bookstore.Models
         //public string Author { get; set; }
         [Column(TypeName = "date")]
         public DateTime PublisherDate { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime ArrivalDate { get; set; }
 
         //public int Book_N { get; set; }
-
+        public byte[] poster { get; set; }
         //relation 
         [ForeignKey("Author")]
         public int authorID { get; set; }

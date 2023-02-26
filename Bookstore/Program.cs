@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<BookStoreDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("default")));
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>() //Identity
     .AddEntityFrameworkStores<BookStoreDbContext>();
@@ -45,6 +46,8 @@ builder.Services.AddScoped<IBookRepo, BookRepo>(); //Ingect IBookRepo
 builder.Services.AddScoped<IOrderDetailRepo, OrderDetailRepo>(); //Ingect IOrderDetailRepo
 =======
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>(); //Ingect IReviewRepo
+builder.Services.AddScoped<IbooksRepo, booksRepo>(); //Ingect IReviewRepo
+
 
 
 

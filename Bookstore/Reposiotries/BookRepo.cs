@@ -73,7 +73,7 @@ namespace Bookstore.Reposiotries
 
         public async Task<List<Book>> getByNewArrival()
         {
-            return await dbContext.Books.OrderByDescending(n=>n.PublisherDate)
+            return await dbContext.Books.OrderByDescending(n=>n.ArrivalDate)
                 .Include(b => b.Author).Include(b => b.Publisher)
                 .Include(b => b.Category).ToListAsync();
 
