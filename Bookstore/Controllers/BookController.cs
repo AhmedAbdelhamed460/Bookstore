@@ -46,50 +46,60 @@ namespace Bookstore.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> getById(int id)
         {
-            Book? book = await bookRepo.getById(id);
-            if (book != null) 
+            if(id != 0)
             {
-                BookDTO bookDTO = new BookDTO()
+                Book? book = await bookRepo.getById(id);
+                if (book != null)
                 {
-                    Id = book.Id,
-                    Title = book.Title,
-                    Description = book.Describtion,
-                    //Image = book.Image,
-                    Price = book.Price,
-                    Page = book.Page,
-                    PublisherDate = book.PublisherDate,
-                    Author = $"{book.Author.Firstname} {book.Author.Lastname}",
-                    Category = book.Category.Name,
-                    Publisher = book.Publisher.Name
-                };
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        //Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
 
-                return Ok(bookDTO);
+                    return Ok(bookDTO);
+                }
+                else return NotFound();
             }
-            else return NotFound();
+            return BadRequest();
+           
         }
         [HttpGet("/api/bookname/{name}")]
         public async Task<ActionResult> getByName(string name)
         {
-            Book? book = await bookRepo.getByName(name);
-            if (book != null)
+            if(name != null && name !=" ")
             {
-                BookDTO bookDTO = new BookDTO()
+                Book? book = await bookRepo.getByName(name);
+                if (book != null)
                 {
-                    Id = book.Id,
-                    Title = book.Title,
-                    Description = book.Describtion,
-                    //Image = book.Image,
-                    Price = book.Price,
-                    Page = book.Page,
-                    PublisherDate = book.PublisherDate,
-                    Author = $"{book.Author.Firstname} {book.Author.Lastname}",
-                    Category = book.Category.Name,
-                    Publisher = book.Publisher.Name
-                };
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        //Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
 
-                return Ok(bookDTO);
+                    return Ok(bookDTO);
+                }
+                else return NotFound();
             }
-            else return NotFound();
+            return BadRequest();
+
         }
 
         [HttpPost]

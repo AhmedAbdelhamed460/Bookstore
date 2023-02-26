@@ -13,7 +13,7 @@ namespace Bookstore.Reposiotries
             this.dbContext = dbContext;
         }
 
-        public async Task<List<OrdersPerUser>> getOrdersPerUser(string id)
+        public async Task<List<OrdersPerUserDTO>> getOrdersPerUser(string id)
         { 
 
             var orderDetails = await (from o in dbContext.orderDetails
@@ -21,10 +21,10 @@ namespace Bookstore.Reposiotries
                                 group o.bookId by o.orderId into g
                                 select new { odrerId = g.Key, Books = g.ToList() }).ToListAsync();
 
-            List<OrdersPerUser> ordersPerUsers = new List<OrdersPerUser>();
+            List<OrdersPerUserDTO> ordersPerUsers = new List<OrdersPerUserDTO>();
             foreach (var orderDetail in orderDetails)
             {
-                OrdersPerUser ordersPerUser = new OrdersPerUser();
+                OrdersPerUserDTO ordersPerUser = new OrdersPerUserDTO();
                 ordersPerUser.orderId = orderDetail.odrerId;
                 ordersPerUser.bookId.AddRange(orderDetail.Books);
 
