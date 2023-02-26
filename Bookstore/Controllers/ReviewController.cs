@@ -47,7 +47,6 @@ namespace Bookstore.Controllers
         }
 
 
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetbyId(int id )
         {
