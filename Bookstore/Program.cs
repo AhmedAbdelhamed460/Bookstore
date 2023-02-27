@@ -41,8 +41,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 builder.Services.AddScoped<IBookRepo, BookRepo>(); //Ingect IBookRepo
+
 builder.Services.AddScoped<IOrderDetailRepo, OrderDetailRepo>(); //Ingect IOrderDetailRepo
 builder.Services.AddScoped<IShopingCartrRepo, ShopingCartrRepo>(); //Ingect IOrderDetailRepo
+
+
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>(); //Ingect IReviewRepo
 
 
 

@@ -60,7 +60,24 @@ namespace Bookstore.Reposiotries
             }
             return orderDetailDTOs;
         }
+
     
     
+
+
+
+        public async Task<List<Book>> getAllByCategoryName(string CategoryName)
+        {
+            return await dbContext.Books.Where(n => n.Category.Name == CategoryName).Include(b => b.Author).Include(b => b.Publisher).Include(b => b.Category).ToListAsync();
+        }
+
+        public async Task<List<Book>> getByNewArrival()
+        {
+            return await dbContext.Books.OrderByDescending(n=>n.PublisherDate)
+                .Include(b => b.Author).Include(b => b.Publisher)
+                .Include(b => b.Category).ToListAsync();
+
+        }
+
     }
 }
