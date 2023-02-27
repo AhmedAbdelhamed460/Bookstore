@@ -122,7 +122,7 @@ namespace Bookstore.Controllers
 
         }
 
-
+        //edite
         [HttpPut("{id}")]
         public async Task<IActionResult> edit(int id, [FromForm] AuthorAddDto dTO)
         {
