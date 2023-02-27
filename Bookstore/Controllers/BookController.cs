@@ -46,11 +46,19 @@ namespace Bookstore.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> getById(int id)
         {
+            if(id != 0)
             Book? book = await bookRepo.getById(id);
+
             if (book != null) 
+=======
+            if (book != null)
+
+
             {
-                BookDTO bookDTO = new BookDTO()
+                Book? book = await bookRepo.getById(id);
+                if (book != null)
                 {
+
                     Id = book.Id,
                     Title = book.Title,
                     Description = book.Describtion,
@@ -64,17 +72,38 @@ namespace Bookstore.Controllers
                 };
 
                 return Ok(bookDTO);
+=======
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        //Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
+
+                    return Ok(bookDTO);
+                }
+                else return NotFound();
+
             }
-            else return NotFound();
+            return BadRequest();
+           
         }
         [HttpGet("/api/bookname/{name}")]
         public async Task<ActionResult> getByName(string name)
         {
-            Book? book = await bookRepo.getByName(name);
-            if (book != null)
+            if(name != null && name !=" ")
             {
-                BookDTO bookDTO = new BookDTO()
+                Book? book = await bookRepo.getByName(name);
+                if (book != null)
                 {
+
                     Id = book.Id,
                     Title = book.Title,
                     Description = book.Describtion,
@@ -88,8 +117,28 @@ namespace Bookstore.Controllers
                 };
 
                 return Ok(bookDTO);
+
+                    BookDTO bookDTO = new BookDTO()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Description = book.Describtion,
+                        //Image = book.Image,
+                        Price = book.Price,
+                        Page = book.Page,
+                        PublisherDate = book.PublisherDate,
+                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        Category = book.Category.Name,
+                        Publisher = book.Publisher.Name
+                    };
+
+                    return Ok(bookDTO);
+                }
+                else return NotFound();
+
             }
-            else return NotFound();
+            return BadRequest();
+
         }
 
         [HttpPost]
@@ -158,6 +207,79 @@ namespace Bookstore.Controllers
             }
             else return BadRequest();
         }
+
+
+        //[HttpGet("getAllByCategoryName")]
+        //public async Task<ActionResult> getAllByCategoryName(string CategoryName)
+        //{
+        //    List<Book> books = await bookRepo.getAllByCategoryName(CategoryName);
+        //    List<BookDTO> bookDTOs = new List<BookDTO>();
+        //    if (books != null)
+        //    {
+        //        foreach (var book in books)
+        //        {
+        //            BookDTO dTO = new BookDTO()
+        //            {
+        //                Id = book.Id,
+        //                Title = book.Title,
+        //                Description = book.Describtion,
+        //                Image = book.Image,
+        //                Price = book.Price,
+        //                Page = book.Page,
+        //                PublisherDate = book.PublisherDate,
+        //                Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+        //                Category = book.Category.Name,
+        //                Publisher = book.Publisher.Name
+
+        //            };
+        //            bookDTOs.Add(dTO);
+
+        //        }
+        //        return Ok(bookDTOs);
+        //    }
+        //    else return BadRequest();
+        //}
+
+
+
+
+
+
+        //[HttpGet("getByNewArrival")]
+        //public async Task<ActionResult> getByNewArrival()
+        //{
+        //    List<Book> books = await bookRepo.getByNewArrival();
+        //    List<BookDTO> bookDTOs = new List<BookDTO>();
+        //    if (books != null)
+        //    {
+        //        foreach (var book in books)
+        //        {
+        //            bookDTOs.Add(new BookDTO()
+        //            {
+        //                Id = book.Id,
+        //                Title = book.Title,
+        //                Description = book.Describtion,
+        //                Image = book.Image,
+        //                Price = book.Price,
+        //                Page = book.Page,
+        //                PublisherDate = book.PublisherDate,
+        //                Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+        //                Category = book.Category.Name,
+        //                Publisher = book.Publisher.Name
+        //            });
+        //        }
+        //        return Ok(bookDTOs);
+        //    }
+        //    else return NotFound();
+        //}
+
+
+
+
+
+
+
+
 
         [HttpGet("/api/bookBestSeller")]
         public ActionResult getBestSeller()

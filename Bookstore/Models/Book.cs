@@ -9,26 +9,31 @@ namespace Bookstore.Models
         [StringLength(200)]
         public string Describtion { get; set; }
 
+        [StringLength(200)]
+        //public string Image { get; set; }
+        //[StringLength(50)]
+
+
        
         [StringLength(50)]
+
         public string? Title { get; set; }
         [Column(TypeName ="money")]
         public double Price { get; set; }
-        //[StringLength(100)]
-        //public string Feedback { get; set; }
+        
         public int Page { get; set; }
 
-        //[StringLength(50)]
-        //public string Publisher { get; set; }
-        //[StringLength(50)]
-        //public string Author { get; set; }
         [Column(TypeName = "date")]
         public DateTime PublisherDate { get; set; }
         [Column(TypeName = "date")]
         public DateTime ArrivalDate { get; set; }
 
+
+
+
         //public int Book_N { get; set; }
         public byte[] poster { get; set; }
+
         //relation 
         [ForeignKey("Author")]
         public int authorID { get; set; }
@@ -44,6 +49,7 @@ namespace Bookstore.Models
 
         public virtual List<Review>? Reviews { get; set; } = new List<Review>();
         public virtual List<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();
+        public virtual ShopingCart? ShopingCart { get; set; }
 
     }
 }

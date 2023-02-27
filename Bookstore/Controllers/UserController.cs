@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Bookstore.Controllers
 {
@@ -64,27 +65,41 @@ namespace Bookstore.Controllers
                     bool valid = await userManager.CheckPasswordAsync(user, loginDTO.Password);
                     if (valid)
                     {
-                        // await signInManager.SignInAsync(user, loginVM.RememberMe);
-                        //List<Claim> claims = new List<Claim>()
-                        //{
-                        //    new Claim("Address",user.Address),
-                        //    new Claim("Age",user.Age.ToString())
-                        //};
-
                         //Generate Token
                         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my_secret_key_123456"));
                         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-                        var token = new JwtSecurityToken(
-                        expires: DateTime.Now.AddMinutes(120),
-                        signingCredentials: credentials);
+                        var claims = new List<Claim>();
+                        claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                        claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
-                        return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+
+                        //Get Role
+                        var userRoles = await userManager.GetRolesAsync(user);
+                        foreach(var userRole in userRoles)
+                        {
+                         claims.Add(new Claim(ClaimTypes.Role, userRole));
+                        }
+
+
+                        var myToken = new JwtSecurityToken(
+                        expires: DateTime.Now.AddMinutes(120),
+                        signingCredentials: credentials,
+                        claims: claims   );
+
+                        return Ok(new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(myToken),
+                            expiration= myToken.ValidTo
+                            //roles = userRoles
+                        });
+
 
                     }
                     else return Unauthorized();
                 }
-             return Unauthorized();
+                return Unauthorized();
 
         }
 
