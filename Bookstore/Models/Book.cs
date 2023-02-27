@@ -27,7 +27,7 @@ namespace Bookstore.Models
         [ForeignKey("Author")]
         public int authorID { get; set; }
         public virtual Author? Author { get; set; }
-
+        
         [ForeignKey("Category")]
         public int categoryID { get; set; }
         public virtual Category? Category { get; set; }

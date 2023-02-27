@@ -34,7 +34,7 @@ namespace Bookstore.Controllers
                        
                         Title = book.Title,
                         Describtion = book.Describtion,
-                        //Image = book.Image,
+                        poster = book.poster,
                         Price = book.Price,
                         Page = book.Page,
                         PublisherDate = book.PublisherDate,
