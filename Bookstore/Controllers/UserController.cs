@@ -68,13 +68,14 @@ namespace Bookstore.Controllers
                         //Generate Token
                         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my_secret_key_123456"));
                         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
                         var claims = new List<Claim>();
                         claims.Add(new Claim(ClaimTypes.Name, user.UserName));
                         claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
                         claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
 
-                         //Get Role
+                        //Get Role
                         var userRoles = await userManager.GetRolesAsync(user);
                         foreach(var userRole in userRoles)
                         {

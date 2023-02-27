@@ -13,7 +13,7 @@ namespace Bookstore.Models
 
         [ForeignKey("Book")]
         public int bookId { get; set; }
-        public virtual Book Book { get; set; }
+        public virtual Book? Book { get; set; }
 
     }
 }
