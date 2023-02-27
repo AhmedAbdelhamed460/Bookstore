@@ -14,5 +14,7 @@
         public DateTime ArrivalDate { get; set; }
         public string PublisherName { get; set; }
         public string CategoryName { get; set; }
+        public string? MainCategory { get; set; }
+
     }
 }

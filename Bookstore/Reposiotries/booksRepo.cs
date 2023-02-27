@@ -93,6 +93,26 @@ namespace Bookstore.Reposiotries
                 .SingleOrDefaultAsync(n => n.Id == id);
         }
 
+        public async Task<List<Book>> getByMainCategory(string MainCategory)
+        {
+            return await dbContext.Books
+               .Include(n => n.Category)
+               .Include(n => n.Author)
+               .Include(n => n.Publisher)
+               .Where(n=>n.MainCategory == MainCategory)
+               .ToListAsync();
+        }
+
+        public async Task<List<Book>> getByMainCategoryByCategoryname(string MainCategory, string Categoryname)
+        {
+            return await dbContext.Books
+               .Include(n => n.Category)
+               .Include(n => n.Author)
+               .Include(n => n.Publisher)
+               .Where(n => n.MainCategory == MainCategory && n.Category.Name == Categoryname)
+               .ToListAsync();
+        }
+
         public async Task<Book?> getByName(string name)
         {
             return await dbContext.Books.Include(n => n.Category)

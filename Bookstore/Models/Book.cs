@@ -33,6 +33,8 @@ namespace Bookstore.Models
 
         //public int Book_N { get; set; }
         public byte[] poster { get; set; }
+        [StringLength(50)]
+        public string MainCategory { get; set; }
 
         //relation 
         [ForeignKey("Author")]
