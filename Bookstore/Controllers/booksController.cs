@@ -88,6 +88,17 @@ namespace Bookstore.Controllers
         }
 
 
+        [HttpGet("getByMainCategory")]
+        public async Task<ActionResult> getByMainCategory(string getByMainCategory)
+        {
+            var book = await bookRepo.getByMainCategory(getByMainCategory);
+            var data = mapper.Map<IEnumerable<BookDetailsDto>>(book);
+
+            return Ok(data);
+        }
+
+
+
 
 
 
@@ -109,6 +120,16 @@ namespace Bookstore.Controllers
 
             return Ok(data);
         }
+
+        [HttpGet("getByMainCategoryByCategoryname")]
+        public async Task<ActionResult> getByMainCategoryByCategoryname(string MainCategory, string Categoryname)
+        {
+            var book = await bookRepo.getByMainCategoryByCategoryname(MainCategory, Categoryname);
+            var data = mapper.Map<IEnumerable<BookDetailsDto>>(book);
+
+            return Ok(data);
+        }
+
         [HttpGet("getAllbyPriceAescending")]
         public async Task<ActionResult> getAllbyPriceAescending()
         {
@@ -137,7 +158,7 @@ namespace Bookstore.Controllers
             using var dataStream = new MemoryStream();
 
             await dTO.poster.CopyToAsync(dataStream);
-
+            Book.MainCategory=dTO.MainCategory;
             Book.ArrivalDate = dTO.ArrivalDate;
             Book.Title = dTO.Title;
             Book.Price = dTO.Price;
