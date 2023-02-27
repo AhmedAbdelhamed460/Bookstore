@@ -14,7 +14,7 @@ namespace Bookstore.Reposiotries
 
         Task<List<Book>> getByNewArrival();
         Task<List<Book>> getAllByCategoryName(string CategoryName);
-        List<Book> getBestSeller();
+      
 
         Task<Book?> getById(int id);
         Task<Book?> getByName(string title);

@@ -10,9 +10,13 @@ namespace Bookstore.Models
         public string Firstname { get; set; }
         [StringLength(50)]
         public string Lastname { get; set; }
-        [StringLength(200)]
-        public string Image { get; set; }
+
+        [Column(TypeName = "varchar(MAX)")]
+        public byte[] Image { get; set; }
        
+
+
+
         public string Bio { get; set; }
 
         public virtual List<Book>? Books { get; set; }=new List<Book>();

@@ -11,7 +11,7 @@ namespace Bookstore.Controllers
     {
         private readonly IBookRepo bookRepo;
 
-        public BookController(IBookRepo bookRepo)
+        public BookController(IBookRepo bookRepo) 
         {
             this.bookRepo = bookRepo;
         }
@@ -21,8 +21,7 @@ namespace Bookstore.Controllers
         {
             List<Book> books = await bookRepo.getAll();
             List<BookDTO> bookDTOs = new List<BookDTO>();
-            if (books != null)
-            {
+            if (books != null) {
                 foreach (var book in books)
                 {
                     bookDTOs.Add(new BookDTO()
@@ -30,7 +29,7 @@ namespace Bookstore.Controllers
                         Id = book.Id,
                         Title = book.Title,
                         Description = book.Describtion,
-                        //Image = book.Image,
+                        Image = book.Image,
                         Price = book.Price,
                         Page = book.Page,
                         PublisherDate = book.PublisherDate,
@@ -44,18 +43,36 @@ namespace Bookstore.Controllers
             else return NotFound();
         }
 
-
         [HttpGet("{id:int}")]
         public async Task<ActionResult> getById(int id)
         {
             if(id != 0)
             Book? book = await bookRepo.getById(id);
+
+            if (book != null) 
+=======
             if (book != null)
+
 
             {
                 Book? book = await bookRepo.getById(id);
                 if (book != null)
                 {
+
+                    Id = book.Id,
+                    Title = book.Title,
+                    Description = book.Describtion,
+                    Image = book.Image,
+                    Price = book.Price,
+                    Page = book.Page,
+                    PublisherDate = book.PublisherDate,
+                    Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                    Category = book.Category.Name,
+                    Publisher = book.Publisher.Name
+                };
+
+                return Ok(bookDTO);
+=======
                     BookDTO bookDTO = new BookDTO()
                     {
                         Id = book.Id,
@@ -73,6 +90,7 @@ namespace Bookstore.Controllers
                     return Ok(bookDTO);
                 }
                 else return NotFound();
+
             }
             return BadRequest();
            
@@ -85,6 +103,21 @@ namespace Bookstore.Controllers
                 Book? book = await bookRepo.getByName(name);
                 if (book != null)
                 {
+
+                    Id = book.Id,
+                    Title = book.Title,
+                    Description = book.Describtion,
+                    Image = book.Image,
+                    Price = book.Price,
+                    Page = book.Page,
+                    PublisherDate = book.PublisherDate,
+                    Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                    Category = book.Category.Name,
+                    Publisher = book.Publisher.Name
+                };
+
+                return Ok(bookDTO);
+
                     BookDTO bookDTO = new BookDTO()
                     {
                         Id = book.Id,
@@ -102,6 +135,7 @@ namespace Bookstore.Controllers
                     return Ok(bookDTO);
                 }
                 else return NotFound();
+
             }
             return BadRequest();
 
@@ -122,7 +156,7 @@ namespace Bookstore.Controllers
                         Id = book.Id,
                         Title = book.Title,
                         Description = book.Describtion,
-                        //Image = book.Image,
+                        Image = book.Image,
                         Price = book.Price,
                         Page = book.Page,
                         PublisherDate = book.PublisherDate,
@@ -155,7 +189,7 @@ namespace Bookstore.Controllers
                     {
                         Title = book.Title,
                         Description = book.Describtion,
-                        //Image = book.Image,
+                        Image = book.Image,
                         Price = book.Price,
                         Page = book.Page,
                         PublisherDate = book.PublisherDate,
@@ -248,48 +282,16 @@ namespace Bookstore.Controllers
 
 
         [HttpGet("/api/bookBestSeller")]
-        public async Task<ActionResult> getBestSellerAsync()
+        public ActionResult getBestSeller()
         {
-
             List<Book> books = bookRepo.getBestSeller();
-
+          
             if (books != null)
-
-            //List<Book> books = bookRepo.getBestSeller();
-
-            List<OrderDetailDTO> orderDetailDTOs = bookRepo.getBestSeller();
-            List<BookDTO> bookDTOs = new List<BookDTO>();
-            if (orderDetailDTOs != null)
-
             {
-                for (int i = 0; i < 2; i++)
-                {
-                    Book? book = await bookRepo.getById(orderDetailDTOs[i].BookID);
-                    BookDTO bookDTO = new BookDTO()
-                    {
-                        Id = book.Id,
-                        Title = book.Title,
-                        Description = book.Describtion,
-                        //Image = book.Image,
-                        Price = book.Price,
-                        Page = book.Page,
-                        PublisherDate = book.PublisherDate,
-                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
-                        Category = book.Category.Name,
-                        Publisher = book.Publisher.Name
-                    };
-                    bookDTOs.Add(bookDTO);
-                }
-               return Ok(bookDTOs);
+                return Ok(books);
             }
-            else return NotFound();           
+            else return NotFound();
         }
-
 
     }
 }
-
-}
-=======
-
-
