@@ -6,7 +6,7 @@
         public DateTime Date { get; set; }
         public string ReviewText { get; set; }
         public int bookID { get; set; }
-        public string AppUserId { get; set; }
+        public string appUserId { get; set; }
         public string UserName { get; set; }
        
     }

@@ -44,9 +44,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddScoped<IBookRepo, BookRepo>(); //Ingect IBookRepo
 
 builder.Services.AddScoped<IOrderDetailRepo, OrderDetailRepo>(); //Ingect IOrderDetailRepo
-=======
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>(); //Ingect IOrderDetailRepo
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>(); //Ingect IOrderDetailRepo
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>(); //Ingect IReviewRepo
-builder.Services.AddScoped<IbooksRepo, booksRepo>(); //Ingect IReviewRepo
+builder.Services.AddScoped<IbooksRepo, booksRepo>(); //Ingect IReviewRepos
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>(); //Ingect IReviewRepo
+builder.Services.AddScoped<IOrderRep, OrderRep>(); //Ingect IReviewRepo
+
+
 
 
 

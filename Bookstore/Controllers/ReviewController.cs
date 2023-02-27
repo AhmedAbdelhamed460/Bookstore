@@ -4,6 +4,7 @@ using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Bookstore.Controllers
 {
@@ -26,7 +27,7 @@ namespace Bookstore.Controllers
         {
             List<Review> reviews = await _repo.getAll(bookID);
             List<ReviewBook> reviewBooks = new List<ReviewBook>();
-            if (reviews != null)
+            if (reviews == null)
             {
                 foreach (Review item in reviews)
                 {
@@ -37,7 +38,9 @@ namespace Bookstore.Controllers
                         Rateing = item.Rateing,
                         Date = item.Date,
                         ReviewText = item.ReviewText,
-                        UserName = $"{item.AppUser.firstName}{item.AppUser.LastName}"
+                        UserName = $"{item.AppUser.firstName}{item.AppUser.LastName}",
+                         appUserId = item.appUserID
+
                     };
                     reviewBooks.Add(reviewBook);
                 }
@@ -60,14 +63,14 @@ namespace Bookstore.Controllers
                 Date = Review.Date,
                 ReviewText = Review.ReviewText,
                 UserName = $"{Review.AppUser.firstName} {Review.AppUser.LastName}",
-                AppUserId = Review.appUserID
+                appUserId = Review.appUserID
             };
             return Ok(reviewBook);
           
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddReview(ReviewDTO dTO)
+        public async Task<IActionResult> AddReview(  ReviewDTO dTO)
         {
             if (ModelState.IsValid)
             {
@@ -121,3 +124,36 @@ namespace Bookstore.Controllers
        
     }
 }
+
+
+
+
+
+
+
+
+
+
+//public ActionResult AddOrUpdateReview(int userId, int productId, string review)
+//{
+//    var query = _context.ReviewsOnProducts.Where(R => R.UserId == userId && R.ProductId == productId).SingleOrDefault();
+//    if (query != null)
+//    {
+//        query.Description = review;
+//        _context.SaveChanges();
+//        return Ok("Review Updated");
+//    }
+//    else
+//    {
+//        ReviewsOnProduct reviewsOnProduct = new ReviewsOnProduct()
+//        {
+//            UserId = userId,
+//            ProductId = productId,
+//            Description = review
+
+//        };
+//        _context.ReviewsOnProducts.Add(reviewsOnProduct);
+//        _context.SaveChanges();
+//        return Ok("Review Made");
+//    }
+//}

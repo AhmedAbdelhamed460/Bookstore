@@ -1,0 +1,147 @@
+﻿using Bookstore.DOT;
+using Bookstore.Models;
+using Bookstore.Reposiotries;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace Bookstore.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthorsController : ControllerBase
+    {
+        IAuthorRepository rep;
+        public AuthorsController(IAuthorRepository rep)
+        {
+            this.rep = rep;
+           
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> add([FromForm] AuthorAddDto dto)
+        {
+            using var dataStream = new MemoryStream();
+
+            await dto.Image.CopyToAsync(dataStream);
+            var author = new Author()
+            {
+                Bio = dto.Bio,
+                Firstname = dto.Firstname,
+                Lastname = dto.Lastname,
+                Image = dataStream.ToArray(),
+
+            };
+           rep.add(author);
+            return Ok(author);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> getALL()
+        {
+            List<Author> authorList = await rep.getAll();
+            //dto
+            List<AuthorBookDTO> authorBooks = new List<AuthorBookDTO>();
+            foreach (Author item in authorList)
+            {
+                AuthorBookDTO bookDTO = new AuthorBookDTO()
+                {
+                    authorId = item.Id,
+                    Firstname = item.Firstname,
+                    Lastname = item.Lastname,
+                      Image = item.Image,
+                    Bio = item.Bio,
+
+                };
+                foreach (Book bb in item.Books)
+                {
+                    bookDTO.bookName.Add(bb.Title);
+                }
+                authorBooks.Add(bookDTO);
+            }
+            return Ok(authorBooks);
+        }
+
+
+        //getbyid
+        [HttpGet("{id:int}")]
+        public async Task <IActionResult> getById(int id)
+        {
+            Author au = await rep.getById(id);
+            AuthorBookDTO authorBookDTO = new AuthorBookDTO()
+            {
+                authorId = au.Id,
+                Firstname = au.Firstname,
+                Lastname = au.Lastname,
+                 Image = au.Image,
+                Bio = au.Bio,
+
+            };
+            foreach (Book bb in au.Books)
+            {
+                authorBookDTO.bookName.Add(bb.Title);
+            }
+
+            return Ok(authorBookDTO);
+        }
+
+        [HttpGet("{name:alpha}")]
+        public async Task<IActionResult> GetByName(string name)
+        {
+            Author au = await rep.GetByName(name);
+            AuthorBookDTO authorBookDTO = new AuthorBookDTO()
+            {
+                authorId = au.Id,
+                Firstname = au.Firstname,
+                Lastname = au.Lastname,
+                     Image = au.Image,
+                Bio = au.Bio,
+
+            };
+            foreach (Book b in au.Books)
+            {
+                authorBookDTO.bookName.Add(b.Title);
+            }
+            return Ok(authorBookDTO);
+
+        }
+
+        //delete
+        [HttpDelete]
+        public async Task< ActionResult> deleteAuthor(int id)
+        {
+            Author au = await rep.getById(id);
+            if (au == null) { return NotFound(); }
+            else
+            {
+                rep.Delete(au);
+                return Ok(au);
+            }
+
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> edit(int id, [FromForm] AuthorAddDto dTO)
+        {
+            var author = await rep.getById(id);
+            if (author == null) return NotFound($"no book with id {id}");
+            using var dataStream = new MemoryStream();
+
+            await dTO.Image.CopyToAsync(dataStream);
+
+            author.Bio = dTO.Bio;
+            author.Firstname = dTO.Firstname;
+            author.Lastname = dTO.Lastname;
+            author.Image = dataStream.ToArray();
+
+
+                rep.edit(author);
+            return Ok("Update completed successfully");
+        }
+
+
+    }
+}
