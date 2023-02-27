@@ -20,10 +20,11 @@ namespace Bookstore.Controllers
         [HttpGet]
         public async Task<ActionResult> getOrdersPerUser(string id)
         {
-            List<OrdersPerUser> OrdersPerUser = await orderDetailRepo.getOrdersPerUser(id);
-            if(OrdersPerUser != null) { 
+
+            List<OrdersPerUserDTO> ordersPerUserDTOs = await orderDetailRepo.getOrdersPerUser(id);
+            if(ordersPerUserDTOs.Count !=0) { 
                
-                return Ok(OrdersPerUser);
+                return Ok(ordersPerUserDTOs);
             }
             else return NotFound();
         }

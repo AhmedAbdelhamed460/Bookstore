@@ -28,7 +28,9 @@ namespace Bookstore.Models
         public string Address { get; set; }
        
         public virtual List<Order>? Order { get; set; }= new List<Order>();
+
         public virtual Review? Review { get; set; }
+        public virtual ShopingCart? ShopingCart { get; set; }
 
     }
 }
