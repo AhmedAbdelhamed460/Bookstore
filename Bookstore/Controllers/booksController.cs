@@ -43,6 +43,7 @@ namespace Bookstore.Controllers
                 publisherID = dTO.PublisherID,
                 PublisherDate = dTO.PublisherDate,
                 poster = dataStream.ToArray(),
+                MainCategory = dTO.MainCategory
             };
             bookRepo.add(book);
             return Ok(book);
@@ -92,9 +93,13 @@ namespace Bookstore.Controllers
         public async Task<ActionResult> getByMainCategory(string getByMainCategory)
         {
             var book = await bookRepo.getByMainCategory(getByMainCategory);
-            var data = mapper.Map<IEnumerable<BookDetailsDto>>(book);
-
-            return Ok(data);
+            if (book.Count != 0)
+            {
+                var data = mapper.Map<IEnumerable<BookDetailsDto>>(book);
+                return Ok(data);
+            }
+            else return NotFound();
+            
         }
 
 
