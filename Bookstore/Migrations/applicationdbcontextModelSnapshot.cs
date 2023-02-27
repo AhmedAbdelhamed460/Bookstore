@@ -330,7 +330,11 @@ namespace Bookstore.Migrations
 
                     b.HasKey("AppUserId", "bookId");
 
-                    b.HasIndex("bookId");
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
+                    b.HasIndex("bookId")
+                        .IsUnique();
 
                     b.ToTable("shopingCarts");
                 });
@@ -547,14 +551,14 @@ namespace Bookstore.Migrations
             modelBuilder.Entity("Bookstore.Models.ShopingCart", b =>
                 {
                     b.HasOne("Bookstore.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .WithOne("ShopingCart")
+                        .HasForeignKey("Bookstore.Models.ShopingCart", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Bookstore.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("bookId")
+                        .WithOne("ShopingCart")
+                        .HasForeignKey("Bookstore.Models.ShopingCart", "bookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -619,6 +623,8 @@ namespace Bookstore.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Review");
+
+                    b.Navigation("ShopingCart");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Author", b =>
@@ -631,6 +637,8 @@ namespace Bookstore.Migrations
                     b.Navigation("OrderDetails");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("ShopingCart");
                 });
 
             modelBuilder.Entity("Bookstore.Models.Category", b =>

@@ -31,16 +31,19 @@ namespace Bookstore.Controllers
                     Book book = await bookRepo.getById(item.Key);
                     shopingCartBooksDTOs.Add(new ShopingCartBooksDTO()
                     {
-                        Id = book.Id,
+                       
                         Title = book.Title,
-                        Description = book.Describtion,
+                        Describtion = book.Describtion,
                         //Image = book.Image,
                         Price = book.Price,
                         Page = book.Page,
                         PublisherDate = book.PublisherDate,
-                        Author = $"{book.Author.Firstname} {book.Author.Lastname}",
-                        Category = book.Category.Name,
-                        Publisher = book.Publisher.Name,
+                        //Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+                        AuthorFirstname = book.Author.Firstname,
+                        AuthorLastname = book.Author.Lastname,
+                        ArrivalDate = book.ArrivalDate,
+                        CategoryName = book.Category.Name,
+                        PublisherName = book.Publisher.Name,
                         Amount = item.Value
                     }); 
                 }
