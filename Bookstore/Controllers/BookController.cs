@@ -11,7 +11,7 @@ namespace Bookstore.Controllers
     {
         private readonly IBookRepo bookRepo;
 
-        public BookController(IBookRepo bookRepo) 
+        public BookController(IBookRepo bookRepo)
         {
             this.bookRepo = bookRepo;
         }
@@ -21,7 +21,8 @@ namespace Bookstore.Controllers
         {
             List<Book> books = await bookRepo.getAll();
             List<BookDTO> bookDTOs = new List<BookDTO>();
-            if (books != null) {
+            if (books != null)
+            {
                 foreach (var book in books)
                 {
                     bookDTOs.Add(new BookDTO()
@@ -43,10 +44,14 @@ namespace Bookstore.Controllers
             else return NotFound();
         }
 
+
         [HttpGet("{id:int}")]
         public async Task<ActionResult> getById(int id)
         {
             if(id != 0)
+            Book? book = await bookRepo.getById(id);
+            if (book != null)
+
             {
                 Book? book = await bookRepo.getById(id);
                 if (book != null)
@@ -245,11 +250,17 @@ namespace Bookstore.Controllers
         [HttpGet("/api/bookBestSeller")]
         public async Task<ActionResult> getBestSellerAsync()
         {
+
+            List<Book> books = bookRepo.getBestSeller();
+
+            if (books != null)
+
             //List<Book> books = bookRepo.getBestSeller();
 
             List<OrderDetailDTO> orderDetailDTOs = bookRepo.getBestSeller();
             List<BookDTO> bookDTOs = new List<BookDTO>();
             if (orderDetailDTOs != null)
+
             {
                 for (int i = 0; i < 2; i++)
                 {
@@ -277,4 +288,8 @@ namespace Bookstore.Controllers
 
     }
 }
+
+}
+=======
+
 
