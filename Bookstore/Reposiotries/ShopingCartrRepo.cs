@@ -1,6 +1,7 @@
 ﻿using Bookstore.DOT;
 using Bookstore.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace Bookstore.Reposiotries
 {
@@ -20,8 +21,8 @@ namespace Bookstore.Reposiotries
         //}
         public async Task<UserShopingCartDTO> getByUserId(string userId)
         {
-            //return await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).Where(sc => sc.AppUserId == userId).ToListAsync();
             var shopingCarts = await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).Where(sc => sc.AppUserId == userId).GroupBy(sc=> sc.AppUserId).ToListAsync();
+                
             UserShopingCartDTO userShopingCart = new UserShopingCartDTO();
             foreach(var group in shopingCarts) 
             {
@@ -38,6 +39,10 @@ namespace Bookstore.Reposiotries
         {
             return await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).SingleOrDefaultAsync(sc => sc.AppUserId == userId && sc.bookId == bookId );
         }
+        //public async Task<ShopingCart> getBooksIdByUserId(string userId)
+        //{
+            
+        //}
         public async Task add(ShopingCart shopingCart)
         {
             await dbContext.shopingCarts.AddAsync(shopingCart);
