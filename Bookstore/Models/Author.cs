@@ -13,10 +13,6 @@ namespace Bookstore.Models
 
         [Column(TypeName = "varchar(MAX)")]
         public string Image { get; set; }
-       
-
-
-
         public string Bio { get; set; }
 
         public virtual List<Book>? Books { get; set; }=new List<Book>();

@@ -25,16 +25,23 @@ namespace Bookstore.Controllers
             //using var dataStream = new MemoryStream();
 
             //await dto.Image.CopyToAsync(dataStream);
-            var author = new Author()
+            if (ModelState.IsValid)
             {
-                Bio = dto.Bio,
-                Firstname = dto.Firstname,
-                Lastname = dto.Lastname,
-                Image = dto.Image,
+                try
+                {
+                    var author = new Author()
+                    {
+                        Bio = dto.Bio,
+                        Firstname = dto.Firstname,
+                        Lastname = dto.Lastname,
+                        Image = dto.Image,
 
-            };
-           rep.add(author);
-            return Ok(author);
+                    };
+                    rep.add(author);
+                    return Ok(dto);
+                }catch(Exception ex) { return BadRequest(ex); }
+            }
+            return BadRequest();
 
         }
 
@@ -129,17 +136,20 @@ namespace Bookstore.Controllers
             var author = await rep.getById(id);
             if (author == null) return NotFound($"no book with id {id}");
             //using var dataStream = new MemoryStream();
-
             //await dTO.Image.CopyToAsync(dataStream);
-
-            author.Bio = dTO.Bio;
-            author.Firstname = dTO.Firstname;
-            author.Lastname = dTO.Lastname;
-        //    author.Image = dataStream.ToArray();
-
-
-                rep.edit(author);
-            return Ok("Update completed successfully");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    author.Bio = dTO.Bio;
+                    author.Firstname = dTO.Firstname;
+                    author.Lastname = dTO.Lastname;
+                    author.Image = dTO.Image;
+                    rep.edit(author);
+                    return Ok(dTO);
+                }catch(Exception ex) { return BadRequest(ex.Message); }
+            }
+            else { return BadRequest(); }   
         }
 
 
