@@ -5,7 +5,7 @@
        
         public string Title { get; set; }
         public string Describtion { get; set; }
-        public byte[] poster { get; set; }
+        public string poster { get; set; }
         public double Price { get; set; }
         public int Page { get; set; }
         public DateTime PublisherDate { get; set; }

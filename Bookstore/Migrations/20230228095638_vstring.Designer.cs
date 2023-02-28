@@ -4,6 +4,7 @@ using Bookstore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookstore.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class applicationdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20230228095638_vstring")]
+    partial class vstring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,9 +176,9 @@ namespace Bookstore.Migrations
                     b.Property<int>("categoryID")
                         .HasColumnType("int");
 
-                    b.Property<string>("poster")
+                    b.Property<byte[]>("poster")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("publisherID")
                         .HasColumnType("int");

@@ -6,7 +6,7 @@
        
         public string Title { get; set; }
         public string Description { get; set; }
-        public IFormFile poster { get; set; }
+        public string poster { get; set; }
         public double Price { get; set; }
         public int Page { get; set; }
         public DateTime PublisherDate { get; set; }

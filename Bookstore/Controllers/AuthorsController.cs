@@ -22,15 +22,15 @@ namespace Bookstore.Controllers
         [HttpPost]
         public async Task<IActionResult> add([FromForm] AuthorAddDto dto)
         {
-            using var dataStream = new MemoryStream();
+            //using var dataStream = new MemoryStream();
 
-            await dto.Image.CopyToAsync(dataStream);
+            //await dto.Image.CopyToAsync(dataStream);
             var author = new Author()
             {
                 Bio = dto.Bio,
                 Firstname = dto.Firstname,
                 Lastname = dto.Lastname,
-                Image = dataStream.ToArray(),
+                Image = dto.Image,
 
             };
            rep.add(author);
@@ -128,14 +128,14 @@ namespace Bookstore.Controllers
         {
             var author = await rep.getById(id);
             if (author == null) return NotFound($"no book with id {id}");
-            using var dataStream = new MemoryStream();
+            //using var dataStream = new MemoryStream();
 
-            await dTO.Image.CopyToAsync(dataStream);
+            //await dTO.Image.CopyToAsync(dataStream);
 
             author.Bio = dTO.Bio;
             author.Firstname = dTO.Firstname;
             author.Lastname = dTO.Lastname;
-            author.Image = dataStream.ToArray();
+        //    author.Image = dataStream.ToArray();
 
 
                 rep.edit(author);

@@ -28,9 +28,9 @@ namespace Bookstore.Controllers
         [HttpPost]
         public async Task<ActionResult> add([FromForm] BookDTO dTO)
         {
-            using var dataStream = new MemoryStream();
+            //using var dataStream = new MemoryStream();
 
-            await dTO.poster.CopyToAsync(dataStream);
+            //await dTO.poster.CopyToAsync(dataStream);
             var book = new Book()
             {
                 ArrivalDate = dTO.ArrivalDate,
@@ -42,7 +42,7 @@ namespace Bookstore.Controllers
                 categoryID = dTO.CategoryID,
                 publisherID = dTO.PublisherID,
                 PublisherDate = dTO.PublisherDate,
-                poster = dataStream.ToArray(),
+                poster = dTO.poster,
                 MainCategory = dTO.MainCategory
             };
             bookRepo.add(book);
@@ -160,9 +160,9 @@ namespace Bookstore.Controllers
         {
             var Book = await  bookRepo.getById(id);
             if (Book == null) return NotFound($"no book with id {id}");
-            using var dataStream = new MemoryStream();
+            //using var dataStream = new MemoryStream();
 
-            await dTO.poster.CopyToAsync(dataStream);
+            //await dTO.poster.CopyToAsync(dataStream);
             Book.MainCategory=dTO.MainCategory;
             Book.ArrivalDate = dTO.ArrivalDate;
             Book.Title = dTO.Title;
@@ -173,7 +173,7 @@ namespace Bookstore.Controllers
             Book.Describtion = dTO.Description;
             Book.PublisherDate= dTO.PublisherDate;
             Book.Page= dTO.Page;
-            Book.poster = dataStream.ToArray();
+            Book.poster = dTO.poster;
 
            bookRepo.edit(Book);
             return Ok(Book);

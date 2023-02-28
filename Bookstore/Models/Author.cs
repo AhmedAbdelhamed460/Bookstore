@@ -12,7 +12,7 @@ namespace Bookstore.Models
         public string Lastname { get; set; }
 
         [Column(TypeName = "varchar(MAX)")]
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
        
 
 

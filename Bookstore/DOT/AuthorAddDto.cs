@@ -9,7 +9,7 @@ namespace Bookstore.DOT
        
         public string Lastname { get; set; }
        
-        public IFormFile Image { get; set; }
+        public string Image { get; set; }
 
         public string Bio { get; set; }
     }

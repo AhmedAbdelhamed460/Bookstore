@@ -21,7 +21,7 @@ namespace Bookstore.Models
         public DateTime PublisherDate { get; set; }
         [Column(TypeName = "date")]
         public DateTime ArrivalDate { get; set; }
-        public byte[] poster { get; set; }
+        public string poster { get; set; }
         [StringLength(50)]
         public string MainCategory { get; set; }
 

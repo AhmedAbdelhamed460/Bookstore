@@ -11,7 +11,7 @@ namespace Bookstore.DOT
 
         public string Lastname { get; set; }
        
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
         public string Bio { get; set; }
        
         public List<string>bookName{ get; set; }=new List<string>();
