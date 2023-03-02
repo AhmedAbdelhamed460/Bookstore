@@ -8,6 +8,5 @@
         public DateTime ShopingDate { get; set; }
         public DateTime ArrivalDate { get; set; }
         public double Discount { get; set; }
-       // public string userid { get; set; }
     }
 }

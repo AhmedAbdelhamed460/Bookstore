@@ -20,21 +20,28 @@ namespace Bookstore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> add([FromForm] AuthorAddDto dto)
+        public async Task<IActionResult> add( AuthorAddDto dto)
         {
             //using var dataStream = new MemoryStream();
 
             //await dto.Image.CopyToAsync(dataStream);
-            var author = new Author()
+            if (ModelState.IsValid)
             {
-                Bio = dto.Bio,
-                Firstname = dto.Firstname,
-                Lastname = dto.Lastname,
-                Image = dto.Image,
+                try
+                {
+                    var author = new Author()
+                    {
+                        Bio = dto.Bio,
+                        Firstname = dto.Firstname,
+                        Lastname = dto.Lastname,
+                        Image = dto.Image,
 
-            };
-           rep.add(author);
-            return Ok(author);
+                    };
+                    rep.add(author);
+                    return Ok(dto);
+                }catch(Exception ex) { return BadRequest(ex); }
+            }
+            return BadRequest();
 
         }
 
@@ -96,7 +103,7 @@ namespace Bookstore.Controllers
                 authorId = au.Id,
                 Firstname = au.Firstname,
                 Lastname = au.Lastname,
-                     Image = au.Image,
+                Image = au.Image,
                 Bio = au.Bio,
 
             };
@@ -124,22 +131,25 @@ namespace Bookstore.Controllers
 
         //edite
         [HttpPut("{id}")]
-        public async Task<IActionResult> edit(int id, [FromForm] AuthorAddDto dTO)
+        public async Task<IActionResult> edit(int id,  AuthorAddDto dTO)
         {
             var author = await rep.getById(id);
             if (author == null) return NotFound($"no book with id {id}");
             //using var dataStream = new MemoryStream();
-
             //await dTO.Image.CopyToAsync(dataStream);
-
-            author.Bio = dTO.Bio;
-            author.Firstname = dTO.Firstname;
-            author.Lastname = dTO.Lastname;
-        //    author.Image = dataStream.ToArray();
-
-
-                rep.edit(author);
-            return Ok("Update completed successfully");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    author.Bio = dTO.Bio;
+                    author.Firstname = dTO.Firstname;
+                    author.Lastname = dTO.Lastname;
+                    author.Image = dTO.Image;
+                    rep.edit(author);
+                    return Ok(dTO);
+                }catch(Exception ex) { return BadRequest(ex.Message); }
+            }
+            else { return BadRequest(); }   
         }
 
 

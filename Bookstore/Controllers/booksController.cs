@@ -26,27 +26,34 @@ namespace Bookstore.Controllers
         // create book
 
         [HttpPost]
-        public async Task<ActionResult> add([FromForm] BookDTO dTO)
+        public async Task<ActionResult> add( BookDTO dTO)
         {
             //using var dataStream = new MemoryStream();
 
             //await dTO.poster.CopyToAsync(dataStream);
-            var book = new Book()
+            if (ModelState.IsValid)
             {
-                ArrivalDate = dTO.ArrivalDate,
-                authorID = dTO.AuthorID,
-                Describtion = dTO.Description,
-                Title = dTO.Title,
-                Page = dTO.Page,
-                Price = dTO.Price,
-                categoryID = dTO.CategoryID,
-                publisherID = dTO.PublisherID,
-                PublisherDate = dTO.PublisherDate,
-                poster = dTO.poster,
-                MainCategory = dTO.MainCategory
-            };
-            bookRepo.add(book);
-            return Ok(book);
+                try
+                {
+                    var book = new Book()
+                    {
+                        ArrivalDate = dTO.ArrivalDate,
+                        authorID = dTO.AuthorID,
+                        Describtion = dTO.Description,
+                        Title = dTO.Title,
+                        Page = dTO.Page,
+                        Price = dTO.Price,
+                        categoryID = dTO.CategoryID,
+                        publisherID = dTO.PublisherID,
+                        PublisherDate = dTO.PublisherDate,
+                        poster = dTO.poster,
+                        MainCategory = dTO.MainCategory
+                    };
+                    bookRepo.add(book);
+                    return Ok(dTO);
+                }catch(Exception ex) { return BadRequest(ex.Message); }
+            }else { return BadRequest(); }
+
         }
 
         //GetALL
@@ -102,11 +109,6 @@ namespace Bookstore.Controllers
             
         }
 
-
-
-
-
-
         [HttpGet("getByNewArrival")]
         public async Task<ActionResult> getByNewArrival()
         {
@@ -156,27 +158,34 @@ namespace Bookstore.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> edit(int id , [FromForm] BookDTO dTO)
+        public async Task<IActionResult> edit(int id ,  BookDTO dTO)
         {
             var Book = await  bookRepo.getById(id);
             if (Book == null) return NotFound($"no book with id {id}");
             //using var dataStream = new MemoryStream();
-
             //await dTO.poster.CopyToAsync(dataStream);
-            Book.MainCategory=dTO.MainCategory;
-            Book.ArrivalDate = dTO.ArrivalDate;
-            Book.Title = dTO.Title;
-            Book.Price = dTO.Price;
-            Book.authorID = dTO.AuthorID;
-            Book.categoryID= dTO.CategoryID;
-            Book.publisherID= dTO.PublisherID;
-            Book.Describtion = dTO.Description;
-            Book.PublisherDate= dTO.PublisherDate;
-            Book.Page= dTO.Page;
-            Book.poster = dTO.poster;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Book.MainCategory = dTO.MainCategory;
+                    Book.ArrivalDate = dTO.ArrivalDate;
+                    Book.Title = dTO.Title;
+                    Book.Price = dTO.Price;
+                    Book.authorID = dTO.AuthorID;
+                    Book.categoryID = dTO.CategoryID;
+                    Book.publisherID = dTO.PublisherID;
+                    Book.Describtion = dTO.Description;
+                    Book.PublisherDate = dTO.PublisherDate;
+                    Book.Page = dTO.Page;
+                    Book.poster = dTO.poster;
 
-           bookRepo.edit(Book);
-            return Ok(Book);
+                    bookRepo.edit(Book);
+                    return Ok(dTO);
+                }catch(Exception ex) { return BadRequest(ex.Message); }
+            }
+            else { return BadRequest(); }
+
         }
 
 

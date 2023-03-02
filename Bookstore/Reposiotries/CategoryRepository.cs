@@ -11,31 +11,29 @@ namespace Bookstore.Reposiotries
             this.db = db;
         }
         //getall
-        public List<Category> getall()
+        public async Task<List<Category>> getall()
         {
-            return db.Categorys.Include(b=>b.Books).ToList();
+            return await db.Categorys.Include(b=>b.Books).ToListAsync();
         }
 
         //getbyid
 
-        public Category getbyid(int id) 
+        public async Task< Category> getbyid(int id) 
         {
-            return db.Categorys.Include(b => b.Books).FirstOrDefault(c => c.Id == id);
+            return await db.Categorys.Include(b => b.Books).SingleOrDefaultAsync(c => c.Id == id);
         }
 
         //getbyname
-        public Category getbyname(string name)
+        public async Task<Category> getbyname(string name)
         {
-            return db.Categorys.Include(b => b.Books).FirstOrDefault(s => s.Name == name);
+            return await db.Categorys.Include(b => b.Books).SingleOrDefaultAsync(s => s.Name == name);
         }
 
         //add
-        public Category Add(Category category)
+        public async Task Add(Category category)
         {
-            db.Categorys.Add(category);
-            db.SaveChanges();
-            category = db.Categorys.Include(b => b.Books).SingleOrDefault(a => a.Id == category.Id);
-            return category;
+            await db.Categorys.AddAsync(category);
+            await db.SaveChangesAsync();
         }
 
         //update

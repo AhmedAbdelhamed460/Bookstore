@@ -4,7 +4,7 @@ using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Net;
 namespace Bookstore.Controllers
 {
     [Route("api/[controller]")]
@@ -19,9 +19,9 @@ namespace Bookstore.Controllers
 
         //getall
         [HttpGet]
-        public ActionResult getall()
+        public async Task<ActionResult> getall()
         {
-            List<Category> categories = rep.getall();
+            List<Category> categories =await rep.getall();
             List<CategoryBookDTO> categoryBookDTOs = new List<CategoryBookDTO>();
             foreach (Category c in categories)
             {
@@ -30,73 +30,60 @@ namespace Bookstore.Controllers
                     categoryId = c.Id,
                     name = c.Name,
                 };
-                foreach (Book b in c.Books)
-                {
-                    categoryBook.booksName.Add(b.Title);
-                }
+               
                 categoryBookDTOs.Add(categoryBook);
             }
             return Ok(categoryBookDTOs);
         }
         [HttpGet("{id:int}")]
-        public ActionResult getbyid(int id)
+        public async Task<ActionResult> getbyid(int id)
         {
-            Category c = rep.getbyid(id);
-            CategoryBookDTO bookDTO = new CategoryBookDTO()
+           var category =await rep.getbyid(id);
+            if (category == null)
+                return NotFound($"no category Found with Id {id}");
+           CategoryBookDTO categoryBookDTO = new CategoryBookDTO()
             {
-                categoryId = c.Id,
-                name = c.Name
+                categoryId=category.Id,
+                name = category.Name,
             };
-            foreach (Book b in c.Books)
-            {
-                bookDTO.booksName.Add(b.Title);
-            }
-            return Ok(bookDTO);
+            return Ok(categoryBookDTO);
+
         }
 
         [HttpGet("{name:alpha}")]
 
-        public ActionResult getbyname(string name)
+        public async Task< ActionResult> getbyname(string name)
         {
-            Category c = rep.getbyname(name);
-            CategoryBookDTO bookDTO = new CategoryBookDTO()
+            var category = await rep.getbyname(name);
+            if (category == null)
+                return NotFound($"no category Found with name {name}");
+            CategoryBookDTO categoryBookDTO = new CategoryBookDTO()
             {
-                categoryId = c.Id,
-                name = c.Name
+                categoryId = category.Id,
+                name = category.Name,
             };
-            foreach (Book b in c.Books)
-            {
-                bookDTO.booksName.Add(b.Title);
-            }
-            return Ok(bookDTO);
+            return Ok(categoryBookDTO);
 
         }
-
         [HttpPost]
-        public ActionResult Add(Category category)
+        public async Task<IActionResult> Add(CategoryBookDTO dto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Category c = rep.Add(category);
-                    CategoryBookDTO categoryBookDTO = new CategoryBookDTO()
+                    var category = new Category()
                     {
-                        categoryId=c.Id,
-                        name=c.Name
+                        Id=dto.categoryId,
+                        Name=dto.name
                     };
-                    foreach (Book b in c.Books)
-                    {
-                        categoryBookDTO.booksName.Add(b.Title);
-                    }
-                    return Ok(categoryBookDTO);
+                    rep.Add(category);
+                    return Ok(category);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                catch (Exception ex) { return BadRequest(ex.Message); }
+
             }
-            else return BadRequest();
+            else { return BadRequest(); }
         }
         //update
         [HttpPut]

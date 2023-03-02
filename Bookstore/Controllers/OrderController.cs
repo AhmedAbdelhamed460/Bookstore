@@ -3,7 +3,6 @@ using Bookstore.Models;
 using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Bookstore.Controllers
 {
@@ -11,28 +10,41 @@ namespace Bookstore.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderRep rep;
-        private readonly IShopingCartrRepo shopingCartrRepo;
-        private readonly IOrderDetailRepo orderDetailRepo;
-        private readonly IbooksRepo booksRepo;
-
-        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IbooksRepo booksRepo )
+        public IOrderRep rep;
+        public OrderController(IOrderRep rep)
         {
             this.rep = rep;
-            this.shopingCartrRepo = shopingCartrRepo;
-            this.orderDetailRepo = orderDetailRepo;
-            this.booksRepo = booksRepo;
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var order = await rep.GetById(id);
+            if (order == null)
+                return NotFound($"no order Found with Id {id}");
+            OrderDTO orderDTO = new OrderDTO()
+            {
+                Id = order.Id,
+                //number = order.Number,
+                Shopingcost = order.Shopingcost,
+                ShopingDate = order.ShopingDate,
+                ArrivalDate = order.ArrivalDate,
+                Discount = order.Discount,
+                //userId = order.AppUserId
+            };
+            return Ok(orderDTO);
         }
         [HttpGet]
-        public ActionResult getorders()
+        public async Task <ActionResult>getorders()
         {
-            List<Order> orders = rep.getOrders();
+            List<Order> orders =await rep.getOrders();
             List<OrderDTO> ordersDTO = new List<OrderDTO>();
             foreach(Order item in orders)
             {
                 OrderDTO dTO = new OrderDTO()
                 {
-                    orderId = item.Id,
+                    Id =item.Id,
+                   // number=item.Number,
                     ShopingDate=item.ShopingDate,
                     Shopingcost=item.Shopingcost,
                     ArrivalDate=item.ArrivalDate,
@@ -43,8 +55,6 @@ namespace Bookstore.Controllers
             }
             return Ok(ordersDTO);
         }
-
-
         [HttpPost]
         public async Task<ActionResult> add(OrderDTO orderDTO)
         {
@@ -74,27 +84,26 @@ namespace Bookstore.Controllers
             return Ok(orderToReturnDTO);
         }
         [HttpPut]
-        public ActionResult update(Order order,string userid)
+        public async Task<ActionResult> update(OrderDTO dTO, int id)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Order o = rep.update(order, userid);
-                    return NoContent();
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            else return BadRequest();
-        }
 
+            var order = await rep.GetById(id);
+            if (order == null) return NotFound($"no order with id {id}");
+
+            order.Id = dTO.Id;
+            order.Shopingcost = dTO.Shopingcost;
+            order.ShopingDate = dTO.ShopingDate;
+            order.ArrivalDate = dTO.ArrivalDate;
+            order.Discount = dTO.Discount;
+
+
+            rep.update(order);
+            return Ok("Update completed successfully");
+        }
         [HttpDelete]
         public ActionResult deleteOrder(int orderid)
         {
-            Order order = rep.deleteOrder( orderid);
+            Order order = rep.deleteOrder(orderid);
             if (order == null) { return NotFound(); }
             else
             {
@@ -141,9 +150,5 @@ namespace Bookstore.Controllers
                 {
                     return BadRequest(ex.Message);
 
-                }
-            }
-            else return BadRequest();
-        }
     }
 }

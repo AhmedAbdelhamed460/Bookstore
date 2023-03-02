@@ -85,7 +85,7 @@ namespace Bookstore.Controllers
                         appUserID = dTO.AppUserId,
                     };
                    _repo.AddReview(Review);
-                    return Ok(Review);
+                    return Ok(dTO);
                 } catch (Exception ex) { return BadRequest(ex.Message); }
                
             }

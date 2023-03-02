@@ -10,15 +10,15 @@ namespace Bookstore.Controllers
     [ApiController]
     public class PublisherController : ControllerBase
     {
-        IPublisherRepository rep;
+        private readonly IPublisherRepository rep;
         public PublisherController(IPublisherRepository rep)
         {
             this.rep = rep;
         }
         [HttpGet]
-        public ActionResult GetAll()
+        public async Task <ActionResult> GetAll()
         {
-            List<Publisher> publishers = rep.GetAll();
+            List<Publisher> publishers =await rep.GetAll();
             List<PublisherBookDTO> listpublisherDTO = new List<PublisherBookDTO>();
 
             foreach (Publisher p in publishers)
@@ -29,10 +29,7 @@ namespace Bookstore.Controllers
                     name = p.Name,
                     location = p.Location
                 };
-                foreach (Book bb in p.Books)
-                {
-                    publisherDTO.booksName.Add(bb.Title);
-                }
+              
                 listpublisherDTO.Add(publisherDTO);
 
             }
@@ -41,86 +38,84 @@ namespace Bookstore.Controllers
 
         //getbyid
         [HttpGet("{id:int}")]
-        public ActionResult GetById(int id)
+        public async Task<ActionResult> GetById(int id)
         {
-            Publisher p = rep.GetById(id);
-            PublisherBookDTO publisherDTO = new PublisherBookDTO()
+            var publisher = await rep.GetById(id);
+            if (publisher == null)
+                return NotFound($"no publisher Found with Id {id}");
+            PublisherBookDTO publisherBookDTO = new PublisherBookDTO()
             {
-                publisherId = p.Id,
-                name = p.Name,
-                location = p.Location
+               publisherId=publisher.Id,
+               name = publisher.Name,
+               location = publisher.Location
             };
-            foreach (Book b in p.Books)
-            {
-                publisherDTO.booksName.Add(b.Title);
-            }
-            return Ok(publisherDTO);
+            return Ok(publisherBookDTO);
         }
 
         //getbyname
         [HttpGet("{name:alpha}")]
-        public ActionResult getbyname(string name)
+        public async Task<ActionResult> getbyname(string name)
         {
-            Publisher p = rep.getbyname(name);
-            PublisherBookDTO publisherDTO = new PublisherBookDTO()
+            var publisher = await rep.getbyname(name);
+            if (publisher == null)
+                return NotFound($"no publisher Found with name {name}");
+            PublisherBookDTO publisherBookDTO = new PublisherBookDTO()
             {
-                publisherId = p.Id,
-                name = p.Name,
-                location = p.Location
+               // publisherId = publisher.Id,
+                name = publisher.Name,
+                location = publisher.Location
             };
-            foreach (Book b in p.Books)
-            {
-                publisherDTO.booksName.Add(b.Title);
-            }
-            return Ok(publisherDTO);
+            return Ok(publisherBookDTO);
         }
 
         //add
         [HttpPost]
-        public ActionResult Add(Publisher publisher)
+        public async Task<IActionResult> Add(PublisherBookDTO dTO)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Publisher p = rep.Add(publisher);
-                    PublisherBookDTO publisherBookDTO = new PublisherBookDTO()
+                    var publisher = new Publisher()
                     {
-                        publisherId = p.Id,
-                        name = p.Name,
-                        location = p.Location
+                       // Id=dTO.publisherId,
+                        Name=dTO.name,
+                        Location=dTO.location
                     };
-                    foreach (Book b in p.Books)
-                    {
-                        publisherBookDTO.booksName.Add(b.Title);
-                    }
-                    return Ok(publisherBookDTO);
+                    rep.Add(publisher);
+                    return Ok(publisher);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                catch (Exception ex) { return BadRequest(ex.Message); }
+
             }
-            else return BadRequest();
+            else { return BadRequest(); }
         }
         //update
         [HttpPut]
-        public ActionResult Update(int id, Publisher publisher)
+        public async Task< ActionResult> update(int id,Publisher dto)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Publisher p = rep.Update(id, publisher);
-                    return NoContent();
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            else return BadRequest();
+            var publisher = await rep.GetById(id);
+            if (publisher == null) return NotFound($"no publisher with id {id}");
+
+          //  publisher.Id = dto.publisherId;
+            publisher.Name = dto.Name;
+            publisher.Location = dto.Location;
+
+            rep.update(publisher);
+            return Ok("Update completed successfully");
         }
+        //[HttpPut("id")]
+        //public async Task<IActionResult> Update(int id, PublisherBookDTO dto)
+        //{
+        //    var publisher = rep.GetById(id);
+        //    if (publisher == null)
+        //        return NotFound($"no Publisher Found with Id {id}");
+        //    publisher.Id = dto.publisherId;
+        //    publisher.Name=dto.name;
+        //    publisher.Location=dto.location;
+        //    rep.Update(id,publisher);
+        //    return Ok(publisher);
+        //}
         //delete
         [HttpDelete]
         public ActionResult deletePublisher(int id)

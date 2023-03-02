@@ -4,11 +4,10 @@ namespace Bookstore.Reposiotries
 {
     public interface ICategoryRepository
     {
-        public List<Category> getall();
-        public Category getbyid(int id);
-        public Category getbyname(string name);
-
-        public Category Add(Category category);
+        Task<List<Category>> getall();
+        Task<Category> getbyid(int id);
+        Task<Category> getbyname(string name);
+        Task Add(Category category);
         public Category update(int id, Category category);
         public Category deletecategory(int id);
     }
