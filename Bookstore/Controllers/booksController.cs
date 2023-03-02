@@ -49,9 +49,14 @@ namespace Bookstore.Controllers
                         poster = dTO.poster,
                         MainCategory = dTO.MainCategory
                     };
-                    bookRepo.add(book);
-                    return Ok(dTO);
-                }catch(Exception ex) { return BadRequest(ex.Message); }
+                   await bookRepo.add(book);
+                    await bookRepo.getById(book.Id);
+                    var B = mapper.Map<BookDetailsDto>(book);
+                    return Ok(B);
+
+
+                }
+                catch(Exception ex) { return BadRequest(ex.Message); }
             }else { return BadRequest(); }
 
         }
