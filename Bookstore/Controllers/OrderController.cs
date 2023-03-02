@@ -30,7 +30,7 @@ namespace Bookstore.Controllers
                 ShopingDate = order.ShopingDate,
                 ArrivalDate = order.ArrivalDate,
                 Discount = order.Discount,
-                //userId = order.AppUserId
+                AppUserId = order.AppUserId
             };
             return Ok(orderDTO);
         }
@@ -49,6 +49,7 @@ namespace Bookstore.Controllers
                     Shopingcost=item.Shopingcost,
                     ArrivalDate=item.ArrivalDate,
                     Discount=item.Discount,
+                    AppUserId=item.AppUserId
        
                 };
                 ordersDTO.Add(dTO);
@@ -58,20 +59,18 @@ namespace Bookstore.Controllers
         [HttpPost]
         public async Task<ActionResult> add(OrderDTO dTO)
         {
-                var order = new Order()
-                    {
-                      
-                        //Id=dTO.Id,
-                       // Number=dTO.number,
-                        Shopingcost =dTO.Shopingcost,
-                        ShopingDate=dTO.ShopingDate,
-                        ArrivalDate=dTO.ArrivalDate,
-                        Discount=dTO.Discount,
-                        AppUserId=dTO.userid
 
-                };
-                    rep.add(order);
-                    return Ok(order); 
+            var order = new Order()
+            {
+               // Id = dTO.Id,
+                Shopingcost = dTO.Shopingcost,
+                ShopingDate = dTO.ShopingDate,
+                ArrivalDate = dTO.ArrivalDate,
+                Discount = dTO.Discount,
+                AppUserId = dTO.AppUserId
+            };
+            rep.add(order);
+            return Ok(dTO);
         }
         [HttpPut]
         public async Task<ActionResult> update(OrderDTO dTO, int id)
@@ -85,6 +84,7 @@ namespace Bookstore.Controllers
             order.ShopingDate = dTO.ShopingDate;
             order.ArrivalDate = dTO.ArrivalDate;
             order.Discount = dTO.Discount;
+            order.AppUserId = dTO.AppUserId;
 
 
             rep.update(order);

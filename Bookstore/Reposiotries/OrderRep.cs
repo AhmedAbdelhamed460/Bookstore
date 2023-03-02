@@ -22,17 +22,18 @@ namespace Bookstore.Reposiotries
         }
 
         //add
-        public async Task add(Order order)
-        {
-            await db.Orders.AddAsync(order);
-            await db.SaveChangesAsync();
-
-        }
-        //public async Task add(Order order,string userid)
+        //public async Task add(Order order)
         //{
-
+        //    await db.Orders.AddAsync(order);
+        //    await db.SaveChangesAsync();
 
         //}
+        public async Task<Order> add(Order order)
+        {
+            await db.AddAsync(order);
+            db.SaveChanges();
+            return order;
+        }
         public Order update(Order order)
         {
             db.Orders.Update(order);

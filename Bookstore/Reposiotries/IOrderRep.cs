@@ -6,7 +6,8 @@ namespace Bookstore.Reposiotries
     {
         Task <List<Order>> getOrders();
         Task<Order> GetById(int id);
-        Task add(Order order);
+        Task<Order> add(Order order);
+      
         Order update(Order order);
         public Order deleteOrder( int orderid);
        
