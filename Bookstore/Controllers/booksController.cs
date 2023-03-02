@@ -231,7 +231,12 @@ namespace Bookstore.Controllers
 
 
 
-
+        [HttpGet("sumAllPrice")]
+        public async Task<IActionResult> sumAllPrice()
+        {
+            var books =  bookRepo.sumAllPrice();
+            return Ok(books);
+        }
 
 
     }

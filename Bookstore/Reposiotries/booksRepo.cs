@@ -131,5 +131,10 @@ namespace Bookstore.Reposiotries
      
                 .ToListAsync();
         }
+
+        public  double sumAllPrice()
+        {
+           return   dbContext.Books.Sum(n=>n.Price);
+        }
     }
 }
