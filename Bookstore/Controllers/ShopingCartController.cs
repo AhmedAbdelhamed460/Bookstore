@@ -12,7 +12,6 @@ namespace Bookstore.Controllers
     {
         private readonly IShopingCartrRepo shopingCartrRepo;
         private readonly IBookRepo bookRepo;
-
         public ShopingCartController(IShopingCartrRepo shopingCartrRepo, IBookRepo bookRepo) 
         {
             this.shopingCartrRepo = shopingCartrRepo;
@@ -76,6 +75,33 @@ namespace Bookstore.Controllers
                         amount = shopingCart.Amount                       
                     };
                     return Ok(shopingCartDTO);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+
+                }
+            }
+            else return BadRequest();
+        }
+
+
+        [HttpPut]
+        public async Task<ActionResult> edit(ShopingCartDTO ShopingCartDTO)
+        {
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    ShopingCart shopingCart = new ShopingCart()
+                    {
+                        AppUserId = ShopingCartDTO.userId,
+                        bookId = ShopingCartDTO.bookId,
+                        Amount = ShopingCartDTO.amount
+                    };
+                    await shopingCartrRepo.edit(shopingCart);
+                    return NoContent();
                 }
                 catch (Exception ex)
                 {

@@ -12,7 +12,7 @@ namespace Bookstore.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ShopingCart>().HasKey(s => new { s.AppUserId,s.bookId});
+            modelBuilder.Entity<ShopingCart>().HasKey(s => new { s.AppUserId,s.bookId});          
             modelBuilder.Entity<OrderDetail>().HasKey(o => new { o.orderId, o.bookId });
 
             base.OnModelCreating(modelBuilder);

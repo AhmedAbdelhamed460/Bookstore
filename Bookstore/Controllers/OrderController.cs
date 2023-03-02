@@ -3,6 +3,7 @@ using Bookstore.Models;
 using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Bookstore.Controllers
 {
@@ -10,10 +11,17 @@ namespace Bookstore.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        public IOrderRep rep;
-        public OrderController(IOrderRep rep)
+        private readonly IOrderRep rep;
+        private readonly IShopingCartrRepo shopingCartrRepo;
+        private readonly IOrderDetailRepo orderDetailRepo;
+        private readonly IbooksRepo booksRepo;
+
+        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IbooksRepo booksRepo )
         {
             this.rep = rep;
+            this.shopingCartrRepo = shopingCartrRepo;
+            this.orderDetailRepo = orderDetailRepo;
+            this.booksRepo = booksRepo;
         }
         [HttpGet]
         public ActionResult getorders()
@@ -35,6 +43,8 @@ namespace Bookstore.Controllers
             }
             return Ok(ordersDTO);
         }
+
+
         [HttpPost]
         public ActionResult add(Order order)
         {
@@ -75,6 +85,50 @@ namespace Bookstore.Controllers
             {
                 return Ok(order);
             }
+        }
+
+        [HttpPost("/api/orderNow")]
+        public async Task<ActionResult> orderNow(OrderNowDTO orderNowDTO )
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Order order = new Order()
+                    {
+                        Shopingcost = orderNowDTO.Shopingcost,
+                        ShopingDate = orderNowDTO.ShopingDate,
+                        ArrivalDate = orderNowDTO.ArrivalDate,
+                        Discount = orderNowDTO.Discount,
+                        AppUserId = orderNowDTO.UserId
+
+                    };
+                    order = rep.add(order);
+                    UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(order.AppUserId);
+
+                    foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
+                    {
+                        Book book = await booksRepo.getById(item.Key);
+                        OrderDetail orderDetail = new OrderDetail()
+                        {
+                            orderId = order.Id,
+                            bookId = item.Key,
+                            Quantity = item.Value,
+                            Price = book.Price
+  
+                        }; 
+                        await orderDetailRepo.add(orderDetail);
+                    }
+                   
+                    return Ok(userShopingCartDTO);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+
+                }
+            }
+            else return BadRequest();
         }
     }
 }

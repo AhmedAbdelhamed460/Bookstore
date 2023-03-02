@@ -13,6 +13,11 @@ namespace Bookstore.Reposiotries
             this.dbContext = dbContext;
         }
 
+        public async Task add(OrderDetail orderDetail)
+        {
+            await dbContext.orderDetails.AddAsync(orderDetail);
+            await dbContext.SaveChangesAsync();
+        }
         public async Task<List<OrdersPerUserDTO>> getOrdersPerUser(string id)
         { 
 
