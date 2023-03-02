@@ -26,7 +26,7 @@ namespace Bookstore.Controllers
         // create book
 
         [HttpPost]
-        public async Task<ActionResult> add([FromForm] BookDTO dTO)
+        public async Task<ActionResult> add( BookDTO dTO)
         {
             //using var dataStream = new MemoryStream();
 
@@ -158,7 +158,7 @@ namespace Bookstore.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> edit(int id , [FromForm] BookDTO dTO)
+        public async Task<IActionResult> edit(int id ,  BookDTO dTO)
         {
             var Book = await  bookRepo.getById(id);
             if (Book == null) return NotFound($"no book with id {id}");
