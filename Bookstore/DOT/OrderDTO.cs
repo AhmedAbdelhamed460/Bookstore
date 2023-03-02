@@ -2,11 +2,11 @@
 {
     public class OrderDTO
     {
-        public int  orderid { get; set; }
+        public int  Id { get; set; }
         public double Shopingcost { get; set; }
         public DateTime ShopingDate { get; set; }
         public DateTime ArrivalDate { get; set; }
         public double Discount { get; set; }
-       // public string userid { get; set; }
+        public string userid { get; set; }
     }
 }
