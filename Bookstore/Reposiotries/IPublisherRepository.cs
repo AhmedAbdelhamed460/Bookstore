@@ -4,12 +4,12 @@ namespace Bookstore.Reposiotries
 {
     public interface IPublisherRepository
     {
-        public List<Publisher> GetAll();
-        public Publisher GetById(int id);
-        public Publisher getbyname(string name);
-
-        public Publisher Add(Publisher publisher);
-        public Publisher Update(int id,Publisher publisher);
+        Task <List<Publisher>> GetAll();
+        Task <Publisher> GetById(int id);
+        Task<Publisher> getbyname(string name);
+        Task Add(Publisher publisher);
+   
+        Publisher update(Publisher publisher);
         public Publisher deletePublisher(int id);
 
 
