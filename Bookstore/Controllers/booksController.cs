@@ -49,10 +49,18 @@ namespace Bookstore.Controllers
                         poster = dTO.poster,
                         MainCategory = dTO.MainCategory
                     };
-                    bookRepo.add(book);
+                    await bookRepo.add(book);
                     return Ok(dTO);
-                }catch(Exception ex) { return BadRequest(ex.Message); }
-            }else { return BadRequest(); }
+                }
+                catch(Exception ex) 
+                { 
+                    return BadRequest(ex.Message); 
+                }
+            }
+            else 
+            {
+                return BadRequest(); 
+            }
 
         }
 
@@ -219,7 +227,9 @@ namespace Bookstore.Controllers
                     };
                     bookDTOs.Add(bookDTO);
                 }
-                return Ok(bookDTOs);
+                //return Ok(bookDTOs);
+                return Ok(orderDetailDTOs);
+
             }
             else return NotFound();
         }
