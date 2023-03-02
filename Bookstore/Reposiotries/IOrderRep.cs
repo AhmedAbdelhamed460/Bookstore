@@ -8,5 +8,7 @@ namespace Bookstore.Reposiotries
         public Order add(Order order);
         public Order update(Order order, string userid);
         public Order deleteOrder( int orderid);
+        public Task<Order?> getById(int id);
+
     }
 }

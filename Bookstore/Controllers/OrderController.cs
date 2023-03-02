@@ -32,7 +32,7 @@ namespace Bookstore.Controllers
             {
                 OrderDTO dTO = new OrderDTO()
                 {
-                    orderid=item.Id,
+                    orderId = item.Id,
                     ShopingDate=item.ShopingDate,
                     Shopingcost=item.Shopingcost,
                     ArrivalDate=item.ArrivalDate,
@@ -46,17 +46,32 @@ namespace Bookstore.Controllers
 
 
         [HttpPost]
-        public ActionResult add(Order order)
+        public async Task<ActionResult> add(OrderDTO orderDTO)
         {
-            Order o = rep.add(order);
-            OrderDTO orderdto = new OrderDTO()
+
+            Order? order = new Order()
             {
-                Shopingcost = o.Shopingcost,
-                ShopingDate = o.ShopingDate,
-                ArrivalDate = o.ArrivalDate,
-                Discount = o.Discount,
+                Shopingcost = orderDTO.Shopingcost,
+                ShopingDate = orderDTO.ShopingDate,
+                ArrivalDate = orderDTO.ArrivalDate,
+                Discount = orderDTO.Discount,
+                AppUserId = orderDTO.AppUserId
             };
-            return Ok(orderdto);
+            order = rep.add(order);
+            order = await rep.getById(order.Id);
+            OrderToReturnDTO orderToReturnDTO = new OrderToReturnDTO()
+            {
+                orderId = order.Id,
+                AppUserId = order.AppUserId,
+                Shopingcost = order.Shopingcost,
+                ShopingDate = order.ShopingDate,
+                ArrivalDate = order.ArrivalDate,
+                Discount = order.Discount,
+                UserName = order.AppUser.UserName,
+                
+                
+            };
+            return Ok(orderToReturnDTO);
         }
         [HttpPut]
         public ActionResult update(Order order,string userid)
@@ -100,7 +115,7 @@ namespace Bookstore.Controllers
                         ShopingDate = orderNowDTO.ShopingDate,
                         ArrivalDate = orderNowDTO.ArrivalDate,
                         Discount = orderNowDTO.Discount,
-                        AppUserId = orderNowDTO.UserId
+                        AppUserId = orderNowDTO.AppUserId
 
                     };
                     order = rep.add(order);

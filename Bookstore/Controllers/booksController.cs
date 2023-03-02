@@ -210,7 +210,9 @@ namespace Bookstore.Controllers
                     };
                     bookDTOs.Add(bookDTO);
                 }
-                return Ok(bookDTOs);
+                //return Ok(bookDTOs);
+                return Ok(orderDetailDTOs);
+
             }
             else return NotFound();
         }

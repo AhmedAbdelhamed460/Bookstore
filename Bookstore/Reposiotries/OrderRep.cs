@@ -16,7 +16,12 @@ namespace Bookstore.Reposiotries
            // return db.Orders.Include(a=>a.AppUser.firstName).ToList();
             return db.Orders.ToList();
         }
-
+        public async Task<Order?> getById(int id)
+        {
+            return await db.Orders.Include(o => o.AppUser)
+                  .Include(o => o.OrderDetails)
+                  .SingleOrDefaultAsync(o => o.Id == id);
+        }
         //add
         public Order add(Order order)
         {

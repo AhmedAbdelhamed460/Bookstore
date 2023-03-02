@@ -2,7 +2,8 @@
 {
     public class OrderDTO
     {
-        public int  orderid { get; set; }
+        public int orderId { get; set; }
+        public string? AppUserId { get; set; }
         public double Shopingcost { get; set; }
         public DateTime ShopingDate { get; set; }
         public DateTime ArrivalDate { get; set; }
