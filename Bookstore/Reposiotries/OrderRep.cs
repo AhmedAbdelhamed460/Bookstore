@@ -11,10 +11,6 @@ namespace Bookstore.Reposiotries
         {
             this.db = db;
         }
-        public async Task<Order> GetById(int id)
-        {
-            return await db.Orders.SingleOrDefaultAsync(o => o.Id == id);
-        }
         //getall
         public async Task <List<Order>> getOrders()
         {
@@ -33,11 +29,7 @@ namespace Bookstore.Reposiotries
             await db.SaveChangesAsync();
 
         }
-        //public async Task add(Order order,string userid)
-        //{
-
-
-        //}
+      
         public Order update(Order order)
         {
             db.Orders.Update(order);

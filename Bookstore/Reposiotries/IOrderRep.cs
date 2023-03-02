@@ -5,10 +5,11 @@ namespace Bookstore.Reposiotries
     public interface IOrderRep
     {
         Task <List<Order>> getOrders();
-        Task<Order> GetById(int id);
+        Task<Order?> getById(int id);
+
         Task add(Order order);
         Order update(Order order);
-        public Order deleteOrder( int orderid);
+        Order deleteOrder( int orderid);
        
     }
 }

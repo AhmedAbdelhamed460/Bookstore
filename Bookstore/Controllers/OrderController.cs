@@ -10,21 +10,28 @@ namespace Bookstore.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        public IOrderRep rep;
-        public OrderController(IOrderRep rep)
+        private readonly IOrderRep rep;
+        private readonly IShopingCartrRepo shopingCartrRepo;
+        private readonly IOrderDetailRepo orderDetailRepo;
+        private readonly IBookRepo bookRepo;
+
+        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IBookRepo bookRepo)
         {
             this.rep = rep;
+            this.shopingCartrRepo = shopingCartrRepo;
+            this.orderDetailRepo = orderDetailRepo;
+            this.bookRepo = bookRepo;
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetById(int id)
         {
-            var order = await rep.GetById(id);
+            var order = await rep.getById(id);
             if (order == null)
                 return NotFound($"no order Found with Id {id}");
             OrderDTO orderDTO = new OrderDTO()
             {
-                Id = order.Id,
+                orderId = order.Id,
                 //number = order.Number,
                 Shopingcost = order.Shopingcost,
                 ShopingDate = order.ShopingDate,
@@ -35,21 +42,21 @@ namespace Bookstore.Controllers
             return Ok(orderDTO);
         }
         [HttpGet]
-        public async Task <ActionResult>getorders()
+        public async Task<ActionResult> getorders()
         {
-            List<Order> orders =await rep.getOrders();
+            List<Order> orders = await rep.getOrders();
             List<OrderDTO> ordersDTO = new List<OrderDTO>();
-            foreach(Order item in orders)
+            foreach (Order item in orders)
             {
                 OrderDTO dTO = new OrderDTO()
                 {
-                    Id =item.Id,
-                   // number=item.Number,
-                    ShopingDate=item.ShopingDate,
-                    Shopingcost=item.Shopingcost,
-                    ArrivalDate=item.ArrivalDate,
-                    Discount=item.Discount,
-       
+                    orderId = item.Id,
+                    // number=item.Number,
+                    ShopingDate = item.ShopingDate,
+                    Shopingcost = item.Shopingcost,
+                    ArrivalDate = item.ArrivalDate,
+                    Discount = item.Discount,
+
                 };
                 ordersDTO.Add(dTO);
             }
@@ -67,7 +74,7 @@ namespace Bookstore.Controllers
                 Discount = orderDTO.Discount,
                 AppUserId = orderDTO.AppUserId
             };
-            order = rep.add(order);
+            await rep.add(order);
             order = await rep.getById(order.Id);
             OrderToReturnDTO orderToReturnDTO = new OrderToReturnDTO()
             {
@@ -78,8 +85,8 @@ namespace Bookstore.Controllers
                 ArrivalDate = order.ArrivalDate,
                 Discount = order.Discount,
                 UserName = order.AppUser.UserName,
-                
-                
+
+
             };
             return Ok(orderToReturnDTO);
         }
@@ -87,10 +94,10 @@ namespace Bookstore.Controllers
         public async Task<ActionResult> update(OrderDTO dTO, int id)
         {
 
-            var order = await rep.GetById(id);
+            var order = await rep.getById(id);
             if (order == null) return NotFound($"no order with id {id}");
 
-            order.Id = dTO.Id;
+            order.Id = dTO.orderId;
             order.Shopingcost = dTO.Shopingcost;
             order.ShopingDate = dTO.ShopingDate;
             order.ArrivalDate = dTO.ArrivalDate;
@@ -112,7 +119,7 @@ namespace Bookstore.Controllers
         }
 
         [HttpPost("/api/orderNow")]
-        public async Task<ActionResult> orderNow(OrderNowDTO orderNowDTO )
+        public async Task<ActionResult> orderNow(OrderNowDTO orderNowDTO)
         {
             if (ModelState.IsValid)
             {
@@ -127,28 +134,32 @@ namespace Bookstore.Controllers
                         AppUserId = orderNowDTO.AppUserId
 
                     };
-                    order = rep.add(order);
+                    await rep.add(order);
                     UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(order.AppUserId);
 
                     foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
                     {
-                        Book book = await booksRepo.getById(item.Key);
+                        Book book = await bookRepo.getById(item.Key);
                         OrderDetail orderDetail = new OrderDetail()
                         {
                             orderId = order.Id,
                             bookId = item.Key,
                             Quantity = item.Value,
                             Price = book.Price
-  
-                        }; 
+
+                        };
                         await orderDetailRepo.add(orderDetail);
                     }
-                   
-                    return Ok(userShopingCartDTO);
+
+                   return Ok(userShopingCartDTO);
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
 
+                }
+            }
+            return BadRequest("model satate invalid");
+        }
     }
 }
