@@ -1,12 +1,16 @@
-﻿using Bookstore.Models;
+﻿using Bookstore.DOT;
+using Bookstore.Models;
 
 namespace Bookstore.Reposiotries
 {
     public interface IOrderRep
     {
-         public List<Order> getOrders();
-        public Order add(Order order);
-        public Order update(Order order, string userid);
-        public Order deleteOrder( int orderid);
+        Task <List<Order>> getOrders();
+        //Task<Order?> getById(int id);
+        Order add(Order order);
+        Order update(Order order, string userid);
+        Order deleteOrder( int orderid);
+        List<MostUsersHavOrdersDTO> getMostUsersHavOrders();
+
     }
 }
