@@ -2,7 +2,7 @@
 {
     public class BookDetailsDto
     {
-       
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Describtion { get; set; }
         public string poster { get; set; }

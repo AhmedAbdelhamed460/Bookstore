@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookstore.Reposiotries
 {
-    public class CategoryRepository:ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         BookStoreDbContext db;
         public CategoryRepository(BookStoreDbContext db)
@@ -13,12 +13,12 @@ namespace Bookstore.Reposiotries
         //getall
         public async Task<List<Category>> getall()
         {
-            return await db.Categorys.Include(b=>b.Books).ToListAsync();
+            return await db.Categorys.Include(b => b.Books).ToListAsync();
         }
 
         //getbyid
 
-        public async Task< Category> getbyid(int id) 
+        public async Task<Category> getbyid(int id)
         {
             return await db.Categorys.Include(b => b.Books).SingleOrDefaultAsync(c => c.Id == id);
         }
@@ -30,16 +30,17 @@ namespace Bookstore.Reposiotries
         }
 
         //add
-        public async Task Add(Category category)
+        public async Task<Category> Add(Category category)
         {
-            await db.Categorys.AddAsync(category);
-            await db.SaveChangesAsync();
+            await db.AddAsync(category);
+            db.SaveChanges();
+            return category;
         }
 
         //update
-        public Category update(int id, Category category)
+        public Category update(Category category)
         {
-            db.Entry(category).State = EntityState.Modified;
+            db.Categorys.Update(category);
             db.SaveChanges();
             return category;
         }
@@ -52,6 +53,6 @@ namespace Bookstore.Reposiotries
             return c;
         }
 
-       
+
     }
 }

@@ -4,6 +4,7 @@ using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Bookstore.Controllers
 {
@@ -25,95 +26,63 @@ namespace Bookstore.Controllers
             this.bookRepo = bookRepo;
             this.userManager = userManager;
         }
-
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetById(int id)
-        {
-            var order = await rep.getById(id);
-            if (order == null)
-                return NotFound($"no order Found with Id {id}");
-            OrderDTO orderDTO = new OrderDTO()
-            {
-                orderId = order.Id,
-                //number = order.Number,
-                Shopingcost = order.Shopingcost,
-                ShopingDate = order.ShopingDate,
-                ArrivalDate = order.ArrivalDate,
-                Discount = order.Discount,
-                //userId = order.AppUserId
-            };
-            return Ok(orderDTO);
-        }
         [HttpGet]
-        public async Task<ActionResult> getorders()
+        public ActionResult getorders()
         {
-            List<Order> orders = await rep.getOrders();
+            List<Order> orders = rep.getOrders();
             List<OrderDTO> ordersDTO = new List<OrderDTO>();
-            foreach (Order item in orders)
+            foreach(Order item in orders)
             {
                 OrderDTO dTO = new OrderDTO()
                 {
-                    orderId = item.Id,
-                    // number=item.Number,
-                    ShopingDate = item.ShopingDate,
-                    Shopingcost = item.Shopingcost,
-                    ArrivalDate = item.ArrivalDate,
-                    Discount = item.Discount,
-
+                    orderid=item.Id,
+                    ShopingDate=item.ShopingDate,
+                    Shopingcost=item.Shopingcost,
+                    ArrivalDate=item.ArrivalDate,
+                    Discount=item.Discount,
+       
                 };
                 ordersDTO.Add(dTO);
             }
             return Ok(ordersDTO);
         }
+
+
         [HttpPost]
-        public async Task<ActionResult> add(OrderDTO orderDTO)
+        public ActionResult add(Order order)
         {
-
-            Order? order = new Order()
+            Order o = rep.add(order);
+            OrderDTO orderdto = new OrderDTO()
             {
-                Shopingcost = orderDTO.Shopingcost,
-                ShopingDate = orderDTO.ShopingDate,
-                ArrivalDate = orderDTO.ArrivalDate,
-                Discount = orderDTO.Discount,
-                AppUserId = orderDTO.AppUserId
+                Shopingcost = o.Shopingcost,
+                ShopingDate = o.ShopingDate,
+                ArrivalDate = o.ArrivalDate,
+                Discount = o.Discount,
             };
-            await rep.add(order);
-            order = await rep.getById(order.Id);
-            OrderToReturnDTO orderToReturnDTO = new OrderToReturnDTO()
-            {
-                orderId = order.Id,
-                AppUserId = order.AppUserId,
-                Shopingcost = order.Shopingcost,
-                ShopingDate = order.ShopingDate,
-                ArrivalDate = order.ArrivalDate,
-                Discount = order.Discount,
-                UserName = order.AppUser.UserName,
-
-
-            };
-            return Ok(orderToReturnDTO);
+            return Ok(orderdto);
         }
         [HttpPut]
-        public async Task<ActionResult> update(OrderDTO dTO, int id)
+        public ActionResult update(Order order,string userid)
         {
-
-            var order = await rep.getById(id);
-            if (order == null) return NotFound($"no order with id {id}");
-
-            order.Id = dTO.orderId;
-            order.Shopingcost = dTO.Shopingcost;
-            order.ShopingDate = dTO.ShopingDate;
-            order.ArrivalDate = dTO.ArrivalDate;
-            order.Discount = dTO.Discount;
-
-
-            rep.update(order);
-            return Ok("Update completed successfully");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Order o = rep.update(order, userid);
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else return BadRequest();
         }
+
         [HttpDelete]
         public ActionResult deleteOrder(int orderid)
         {
-            Order order = rep.deleteOrder(orderid);
+            Order order = rep.deleteOrder( orderid);
             if (order == null) { return NotFound(); }
             else
             {
@@ -122,7 +91,7 @@ namespace Bookstore.Controllers
         }
 
         [HttpPost("/api/orderNow")]
-        public async Task<ActionResult> orderNow(OrderNowDTO orderNowDTO)
+        public async Task<ActionResult> orderNow(OrderNowDTO orderNowDTO )
         {
             if (ModelState.IsValid)
             {
@@ -134,27 +103,27 @@ namespace Bookstore.Controllers
                         ShopingDate = orderNowDTO.ShopingDate,
                         ArrivalDate = orderNowDTO.ArrivalDate,
                         Discount = orderNowDTO.Discount,
-                        AppUserId = orderNowDTO.AppUserId
+                        AppUserId = orderNowDTO.UserId
 
                     };
-                    await rep.add(order);
+                    order = rep.add(order);
                     UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(order.AppUserId);
 
                     foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
                     {
-                        Book book = await bookRepo.getById(item.Key);
+                        Book book = await booksRepo.getById(item.Key);
                         OrderDetail orderDetail = new OrderDetail()
                         {
                             orderId = order.Id,
                             bookId = item.Key,
                             Quantity = item.Value,
                             Price = book.Price
-
-                        };
+  
+                        }; 
                         await orderDetailRepo.add(orderDetail);
                     }
-
-                   return Ok(userShopingCartDTO);
+                   
+                    return Ok(userShopingCartDTO);
                 }
                 catch (Exception ex)
                 {
@@ -162,7 +131,7 @@ namespace Bookstore.Controllers
 
                 }
             }
-            return BadRequest("model satate invalid");
+            else return BadRequest();
         }
 
         [HttpGet("/api/MostUsersHavOrders")]

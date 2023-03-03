@@ -16,9 +16,9 @@ namespace Bookstore.Controllers
             this.rep = rep;
         }
         [HttpGet]
-        public async Task <ActionResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
-            List<Publisher> publishers =await rep.GetAll();
+            List<Publisher> publishers = await rep.GetAll();
             List<PublisherBookDTO> listpublisherDTO = new List<PublisherBookDTO>();
 
             foreach (Publisher p in publishers)
@@ -29,7 +29,7 @@ namespace Bookstore.Controllers
                     name = p.Name,
                     location = p.Location
                 };
-              
+
                 listpublisherDTO.Add(publisherDTO);
 
             }
@@ -45,9 +45,9 @@ namespace Bookstore.Controllers
                 return NotFound($"no publisher Found with Id {id}");
             PublisherBookDTO publisherBookDTO = new PublisherBookDTO()
             {
-               publisherId=publisher.Id,
-               name = publisher.Name,
-               location = publisher.Location
+                publisherId = publisher.Id,
+                name = publisher.Name,
+                location = publisher.Location
             };
             return Ok(publisherBookDTO);
         }
@@ -61,7 +61,7 @@ namespace Bookstore.Controllers
                 return NotFound($"no publisher Found with name {name}");
             PublisherBookDTO publisherBookDTO = new PublisherBookDTO()
             {
-               // publisherId = publisher.Id,
+                // publisherId = publisher.Id,
                 name = publisher.Name,
                 location = publisher.Location
             };
@@ -78,12 +78,12 @@ namespace Bookstore.Controllers
                 {
                     var publisher = new Publisher()
                     {
-                       // Id=dTO.publisherId,
-                        Name=dTO.name,
-                        Location=dTO.location
+                        // Id=dTO.publisherId,
+                        Name = dTO.name,
+                        Location = dTO.location
                     };
-                    await rep.Add(publisher);
-                    return Ok(publisher);
+                    rep.Add(publisher);
+                    return Ok(dTO);
                 }
                 catch (Exception ex) { return BadRequest(ex.Message); }
 
@@ -92,30 +92,19 @@ namespace Bookstore.Controllers
         }
         //update
         [HttpPut]
-        public async Task< ActionResult> update(int id,Publisher dto)
+        public async Task<ActionResult> update(int id, Publisher dto)
         {
             var publisher = await rep.GetById(id);
             if (publisher == null) return NotFound($"no publisher with id {id}");
 
-          //  publisher.Id = dto.publisherId;
+            //  publisher.Id = dto.publisherId;
             publisher.Name = dto.Name;
             publisher.Location = dto.Location;
 
             rep.update(publisher);
             return Ok("Update completed successfully");
         }
-        //[HttpPut("id")]
-        //public async Task<IActionResult> Update(int id, PublisherBookDTO dto)
-        //{
-        //    var publisher = rep.GetById(id);
-        //    if (publisher == null)
-        //        return NotFound($"no Publisher Found with Id {id}");
-        //    publisher.Id = dto.publisherId;
-        //    publisher.Name=dto.name;
-        //    publisher.Location=dto.location;
-        //    rep.Update(id,publisher);
-        //    return Ok(publisher);
-        //}
+
         //delete
         [HttpDelete]
         public ActionResult deletePublisher(int id)

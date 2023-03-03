@@ -21,7 +21,7 @@ namespace Bookstore.Controllers
         [HttpGet]
         public async Task<ActionResult> getall()
         {
-            List<Category> categories =await rep.getall();
+            List<Category> categories = await rep.getall();
             List<CategoryBookDTO> categoryBookDTOs = new List<CategoryBookDTO>();
             foreach (Category c in categories)
             {
@@ -30,7 +30,7 @@ namespace Bookstore.Controllers
                     categoryId = c.Id,
                     name = c.Name,
                 };
-               
+
                 categoryBookDTOs.Add(categoryBook);
             }
             return Ok(categoryBookDTOs);
@@ -38,12 +38,12 @@ namespace Bookstore.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> getbyid(int id)
         {
-           var category =await rep.getbyid(id);
+            var category = await rep.getbyid(id);
             if (category == null)
                 return NotFound($"no category Found with Id {id}");
-           CategoryBookDTO categoryBookDTO = new CategoryBookDTO()
+            CategoryBookDTO categoryBookDTO = new CategoryBookDTO()
             {
-                categoryId=category.Id,
+                categoryId = category.Id,
                 name = category.Name,
             };
             return Ok(categoryBookDTO);
@@ -52,7 +52,7 @@ namespace Bookstore.Controllers
 
         [HttpGet("{name:alpha}")]
 
-        public async Task< ActionResult> getbyname(string name)
+        public async Task<ActionResult> getbyname(string name)
         {
             var category = await rep.getbyname(name);
             if (category == null)
@@ -74,11 +74,11 @@ namespace Bookstore.Controllers
                 {
                     var category = new Category()
                     {
-                        Id=dto.categoryId,
-                        Name=dto.name
+                        // Id=dto.categoryId,
+                        Name = dto.name
                     };
-                    await rep.Add(category);
-                    return Ok(category);
+                    rep.Add(category);
+                    return Ok(dto);
                 }
                 catch (Exception ex) { return BadRequest(ex.Message); }
 
@@ -87,21 +87,15 @@ namespace Bookstore.Controllers
         }
         //update
         [HttpPut]
-        public ActionResult update(int id, Category category)
+        public async Task<ActionResult> update(CategoryBookDTO dto, int id)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Category au = rep.update(id, category);
-                    return NoContent();
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            else return BadRequest();
+            var category = await rep.getbyid(id);
+            if (category == null) return NotFound($"no category with id {id}");
+
+            category.Name = dto.name;
+
+            rep.update(category);
+            return Ok("Update completed successfully");
         }
 
         //delete

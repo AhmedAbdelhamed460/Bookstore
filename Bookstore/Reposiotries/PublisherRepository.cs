@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookstore.Reposiotries
 {
-    public class PublisherRepository: IPublisherRepository
+    public class PublisherRepository : IPublisherRepository
     {
         BookStoreDbContext db;
         public PublisherRepository(BookStoreDbContext db)
@@ -11,12 +11,12 @@ namespace Bookstore.Reposiotries
             this.db = db;
         }
 
-        public async Task <List<Publisher>> GetAll()
+        public async Task<List<Publisher>> GetAll()
         {
-            return await db.Publishers.Include(b=>b.Books).ToListAsync();
+            return await db.Publishers.Include(b => b.Books).ToListAsync();
         }
 
-        public async Task< Publisher> GetById(int id) 
+        public async Task<Publisher> GetById(int id)
         {
             return await db.Publishers.Include(b => b.Books).FirstOrDefaultAsync(p => p.Id == id);
         }
@@ -25,17 +25,18 @@ namespace Bookstore.Reposiotries
         {
             return await db.Publishers.Include(b => b.Books).SingleOrDefaultAsync(p => p.Name == name);
         }
-        public async Task Add(Publisher publisher)
+        public async Task<Publisher> Add(Publisher publisher)
         {
-            await db.Publishers.AddAsync(publisher);
-            await db.SaveChangesAsync();
+            await db.AddAsync(publisher);
+            db.SaveChanges();
+            return publisher;
         }
 
-        public Publisher update( Publisher publisher)
+        public Publisher update(Publisher publisher)
         {
             db.Publishers.Update(publisher);
             db.SaveChanges();
-            return  publisher;
+            return publisher;
         }
 
 
