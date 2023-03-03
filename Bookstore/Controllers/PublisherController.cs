@@ -83,7 +83,7 @@ namespace Bookstore.Controllers
                         Location=dTO.location
                     };
                     rep.Add(publisher);
-                    return Ok(publisher);
+                    return Ok(dTO);
                 }
                 catch (Exception ex) { return BadRequest(ex.Message); }
 
