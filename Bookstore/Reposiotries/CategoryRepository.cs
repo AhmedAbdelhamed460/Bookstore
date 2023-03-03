@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookstore.Reposiotries
 {
-    public class CategoryRepository:ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         BookStoreDbContext db;
         public CategoryRepository(BookStoreDbContext db)
@@ -11,42 +11,34 @@ namespace Bookstore.Reposiotries
             this.db = db;
         }
         //getall
-        public List<Category> getall()
+        public async Task<List<Category>> getall()
         {
-            return db.Categorys.Include(b=>b.Books).ToList();
+            return await db.Categorys.Include(b => b.Books).ToListAsync();
         }
 
         //getbyid
 
-        public Category getbyid(int id) 
+        public async Task<Category> getbyid(int id)
         {
-            return db.Categorys.Include(b => b.Books).FirstOrDefault(c => c.Id == id);
+            return await db.Categorys.Include(b => b.Books).SingleOrDefaultAsync(c => c.Id == id);
         }
 
         //getbyname
-        public Category getbyname(string name)
+        public async Task<Category> getbyname(string name)
         {
-            return db.Categorys.Include(b => b.Books).FirstOrDefault(s => s.Name == name);
+            return await db.Categorys.Include(b => b.Books).SingleOrDefaultAsync(s => s.Name == name);
         }
 
         //add
-
         public async Task<Category> Add(Category category)
         {
             await db.AddAsync(category);
             db.SaveChanges();
-
-        public Category Add(Category category)
-        {
-            db.Categorys.Add(category);
-            db.SaveChanges();
-            category = db.Categorys.Include(b => b.Books).SingleOrDefault(a => a.Id == category.Id);
-
             return category;
         }
 
         //update
-        public Category update( Category category)
+        public Category update(Category category)
         {
             db.Categorys.Update(category);
             db.SaveChanges();
@@ -61,6 +53,6 @@ namespace Bookstore.Reposiotries
             return c;
         }
 
-       
+
     }
 }
