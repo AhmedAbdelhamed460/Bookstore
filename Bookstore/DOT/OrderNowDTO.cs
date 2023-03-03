@@ -2,6 +2,6 @@
 {
     public class OrderNowDTO : OrderDTO
     {
-       
+        public string UserId { get; set; }
     }
 }

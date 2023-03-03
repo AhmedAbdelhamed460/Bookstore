@@ -1,5 +1,4 @@
-﻿using Bookstore.DOT;
-using Bookstore.Models;
+﻿using Bookstore.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookstore.Reposiotries
@@ -12,27 +11,23 @@ namespace Bookstore.Reposiotries
             this.db = db;
         }
         //getall
-        public async Task <List<Order>> getOrders()
+        public List<Order> getOrders()
         {
-            return await db.Orders.ToListAsync();
+           // return db.Orders.Include(a=>a.AppUser.firstName).ToList();
+            return db.Orders.ToList();
         }
-        public async Task<Order?> getById(int id)
-        {
-            return await db.Orders.Include(o => o.AppUser)
-                  .Include(o => o.OrderDetails)
-                  .SingleOrDefaultAsync(o => o.Id == id);
-        }
-        //add
-        public async Task add(Order order)
-        {
-            await db.Orders.AddAsync(order);
-            await db.SaveChangesAsync();
 
-        }
-      
-        public Order update(Order order)
+        //add
+        public Order add(Order order)
         {
-            db.Orders.Update(order);
+            db.Orders.Add(order);
+            db.SaveChanges();
+            return order;
+        }
+
+        public Order update(Order order, string userid)
+        {
+            db.Entry(order).State = EntityState.Modified;
             db.SaveChanges();
             return order;
         }
@@ -44,7 +39,5 @@ namespace Bookstore.Reposiotries
             db.SaveChanges();
             return order;
         }
-
-       
     }
 }

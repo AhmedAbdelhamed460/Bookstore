@@ -7,6 +7,10 @@ namespace Bookstore.Reposiotries
     {
         Task<List<Book>> getAll();
         Task<List<Book>> getByNewArrival();
+        double sumAllPrice();
+
+
+
         Task<List<Book>> getByMainCategory(string MainCategory);
         Task<List<Book>> getByMainCategoryByCategoryname(string MainCategory ,string Categoryname);
 

@@ -49,18 +49,15 @@ namespace Bookstore.Controllers
                         poster = dTO.poster,
                         MainCategory = dTO.MainCategory
                     };
-                    await bookRepo.add(book);
-                    return Ok(dTO);
+                   await bookRepo.add(book);
+                    await bookRepo.getById(book.Id);
+                    var B = mapper.Map<BookDetailsDto>(book);
+                    return Ok(B);
+
+
                 }
-                catch(Exception ex) 
-                { 
-                    return BadRequest(ex.Message); 
-                }
-            }
-            else 
-            {
-                return BadRequest(); 
-            }
+                catch(Exception ex) { return BadRequest(ex.Message); }
+            }else { return BadRequest(); }
 
         }
 
@@ -227,16 +224,19 @@ namespace Bookstore.Controllers
                     };
                     bookDTOs.Add(bookDTO);
                 }
-                //return Ok(bookDTOs);
-                return Ok(orderDetailDTOs);
-
+                return Ok(bookDTOs);
             }
             else return NotFound();
         }
 
 
 
-
+        [HttpGet("sumAllPrice")]
+        public async Task<IActionResult> sumAllPrice()
+        {
+            var books =  bookRepo.sumAllPrice();
+            return Ok(books);
+        }
 
 
     }

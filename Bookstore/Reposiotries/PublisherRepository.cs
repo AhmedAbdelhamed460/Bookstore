@@ -11,32 +11,41 @@ namespace Bookstore.Reposiotries
             this.db = db;
         }
 
-        public async Task <List<Publisher>> GetAll()
+        public List<Publisher> GetAll()
         {
-            return await db.Publishers.Include(b=>b.Books).ToListAsync();
+            return db.Publishers.Include(b=>b.Books).ToList();
         }
 
-        public async Task< Publisher> GetById(int id) 
+        public Publisher GetById(int id) 
         {
-            return await db.Publishers.Include(b => b.Books).FirstOrDefaultAsync(p => p.Id == id);
+            return db.Publishers.Include(b => b.Books).FirstOrDefault(p => p.Id == id);
         }
 
-        public async Task<Publisher> getbyname(string name)
+        public Publisher getbyname(string name)
         {
-            return await db.Publishers.Include(b => b.Books).SingleOrDefaultAsync(p => p.Name == name);
+            return db.Publishers.Include(b => b.Books).FirstOrDefault(p => p.Name == name);
         }
+
         public async Task<Publisher> Add(Publisher publisher)
         {
             await db.AddAsync(publisher);
             db.SaveChanges();
+
+
+        public Publisher Add(Publisher publisher)
+        {
+            db.Publishers.Add(publisher);
+            db.SaveChanges();
+            publisher=db.Publishers.Include(b=>b.Books).SingleOrDefault(d=>d.Id == publisher.Id);
+
             return publisher;
         }
 
-        public Publisher update( Publisher publisher)
+        public Publisher Update(int id, Publisher publisher)
         {
-            db.Publishers.Update(publisher);
+            db.Entry(publisher).State = EntityState.Modified;
             db.SaveChanges();
-            return  publisher;
+            return publisher;
         }
 
 

@@ -103,7 +103,7 @@ namespace Bookstore.Controllers
                 authorId = au.Id,
                 Firstname = au.Firstname,
                 Lastname = au.Lastname,
-                Image = au.Image,
+                     Image = au.Image,
                 Bio = au.Bio,
 
             };

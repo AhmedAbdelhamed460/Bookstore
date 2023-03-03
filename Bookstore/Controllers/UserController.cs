@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Bookstore.Controllers
 {
@@ -103,34 +102,6 @@ namespace Bookstore.Controllers
                 return Unauthorized();
 
         }
-
-        [HttpPost("/api/userResetPassword")]
-        public async Task<ActionResult> resetPassword(ResetPasswordDTO resetPasswordDTO)
-        {
-            if (ModelState.IsValid)
-            {
-                AppUser? user = await userManager.FindByIdAsync(resetPasswordDTO.UserId);
-                if (user != null)
-                {
-                    bool valid = await userManager.CheckPasswordAsync(user, resetPasswordDTO.OldPassword);
-                    if (valid)
-                    {
-                        IdentityResult result = await userManager.ChangePasswordAsync(user, resetPasswordDTO.OldPassword, resetPasswordDTO.NewPassword);
-                        if (result.Succeeded)
-                        {
-                            return Ok("Passeord Has Changed");
-                        }
-
-                    }
-                    else return Unauthorized();
-                }
-                return Unauthorized();
-            }
-            return BadRequest();
-        //return BadRequest(ModelState.SelectMany(ModelError.))
-
-        }
-
 
         [HttpPost("/api/userToRole")]
         public async Task<ActionResult> addRoleToUser(RoleToUserDTO roleToUserDTO)
