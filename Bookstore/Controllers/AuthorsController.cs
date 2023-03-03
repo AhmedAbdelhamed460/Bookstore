@@ -37,7 +37,7 @@ namespace Bookstore.Controllers
                         Image = dto.Image,
 
                     };
-                    rep.add(author);
+                    await rep.add(author);
                     return Ok(dto);
                 }catch(Exception ex) { return BadRequest(ex); }
             }
