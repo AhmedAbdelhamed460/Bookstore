@@ -238,6 +238,13 @@ namespace Bookstore.Controllers
             return Ok(books);
         }
 
+        [HttpGet("decreaseinstock")]
+        public async Task<ActionResult> decreaseinstock()
+        {
+            var book = await bookRepo.decreaseinstock();
+            var data = mapper.Map<IEnumerable<BookDetailsDto>>(book);
 
+            return Ok(data);
+        }
     }
 }

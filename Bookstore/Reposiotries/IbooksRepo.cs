@@ -23,7 +23,7 @@ namespace Bookstore.Reposiotries
         Task<Book> add(Book book);
         Book edit(Book book);
         Book DeleteBook(Book book);
-
+        Task<List<Book>> decreaseinstock();
 
 
     }

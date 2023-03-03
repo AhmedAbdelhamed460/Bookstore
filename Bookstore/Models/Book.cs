@@ -37,7 +37,7 @@ namespace Bookstore.Models
         [ForeignKey("Publisher")]
         public int publisherID { get; set; }
         public virtual Publisher? Publisher { get; set; }
-
+        public int stock { get; set; }
         public virtual List<Review>? Reviews { get; set; } = new List<Review>();
         public virtual List<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();
         public virtual ShopingCart? ShopingCart { get; set; }

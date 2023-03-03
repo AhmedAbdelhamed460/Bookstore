@@ -136,5 +136,15 @@ namespace Bookstore.Reposiotries
         {
            return   dbContext.Books.Sum(n=>n.Price);
         }
+
+        public async Task<List<Book>> decreaseinstock()
+        {
+            return await dbContext.Books
+                  .Include(n => n.Category)
+                  .Include(n => n.Author)
+                  .Include(n => n.Publisher)
+                  .Where(n => n.stock <= 3)
+                  .ToListAsync();
+        }
     }
 }

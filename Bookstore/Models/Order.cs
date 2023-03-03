@@ -8,6 +8,7 @@ namespace Bookstore.Models
     {
        
         public int Id { get; set; }
+
         //public int Number { get; set; }
 
         [Column(TypeName ="money")]
