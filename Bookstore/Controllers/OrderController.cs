@@ -27,9 +27,9 @@ namespace Bookstore.Controllers
             this.userManager = userManager;
         }
         [HttpGet]
-        public ActionResult getorders()
+        public async Task<ActionResult> getorders()
         {
-            List<Order> orders = rep.getOrders();
+            List<Order> orders =await rep.getOrders();
             List<OrderDTO> ordersDTO = new List<OrderDTO>();
             foreach(Order item in orders)
             {
@@ -49,7 +49,7 @@ namespace Bookstore.Controllers
 
 
         [HttpPost]
-        public ActionResult add(Order order)
+        public  ActionResult add(Order order)
         {
             Order o = rep.add(order);
             OrderDTO orderdto = new OrderDTO()
@@ -111,7 +111,7 @@ namespace Bookstore.Controllers
 
                     foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
                     {
-                        Book book = await booksRepo.getById(item.Key);
+                        Book book = await bookRepo.getById(item.Key);
                         OrderDetail orderDetail = new OrderDetail()
                         {
                             orderId = order.Id,
