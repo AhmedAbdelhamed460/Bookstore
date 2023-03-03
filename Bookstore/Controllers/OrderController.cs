@@ -2,6 +2,7 @@
 using Bookstore.Models;
 using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookstore.Controllers
@@ -14,13 +15,15 @@ namespace Bookstore.Controllers
         private readonly IShopingCartrRepo shopingCartrRepo;
         private readonly IOrderDetailRepo orderDetailRepo;
         private readonly IBookRepo bookRepo;
+        private readonly UserManager<AppUser> userManager;
 
-        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IBookRepo bookRepo)
+        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IBookRepo bookRepo, UserManager<AppUser> userManager)
         {
             this.rep = rep;
             this.shopingCartrRepo = shopingCartrRepo;
             this.orderDetailRepo = orderDetailRepo;
             this.bookRepo = bookRepo;
+            this.userManager = userManager;
         }
 
         [HttpGet("{id:int}")]
@@ -160,6 +163,26 @@ namespace Bookstore.Controllers
                 }
             }
             return BadRequest("model satate invalid");
+        }
+
+        [HttpGet("/api/MostUsersHavOrders")]
+        public async Task<ActionResult> getMostUsersHavOrders()
+        {
+            //List<Book> books = bookRepo.getBestSeller();
+
+            List<MostUsersHavOrdersDTO> mostUsersHavOrdersDTOs = rep.getMostUsersHavOrders();
+            List<AppUser> users = new List<AppUser>();
+            if (mostUsersHavOrdersDTOs != null)
+            {
+               foreach(var mostUserHavOrdersDTO in mostUsersHavOrdersDTOs)
+                {
+                    AppUser? user = await userManager.FindByIdAsync(mostUserHavOrdersDTO.UserId);
+
+                    users.Add(user);
+                }
+                return Ok(users);
+            }
+            else return NotFound();
         }
     }
 }

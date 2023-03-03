@@ -1,4 +1,5 @@
-﻿using Bookstore.Models;
+﻿using Bookstore.DOT;
+using Bookstore.Models;
 
 namespace Bookstore.Reposiotries
 {
@@ -6,10 +7,10 @@ namespace Bookstore.Reposiotries
     {
         Task <List<Order>> getOrders();
         Task<Order?> getById(int id);
-
         Task add(Order order);
         Order update(Order order);
         Order deleteOrder( int orderid);
-       
+        List<MostUsersHavOrdersDTO> getMostUsersHavOrders();
+
     }
 }

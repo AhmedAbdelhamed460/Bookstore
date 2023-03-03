@@ -45,6 +45,26 @@ namespace Bookstore.Reposiotries
             return order;
         }
 
-       
+        public List<MostUsersHavOrdersDTO> getMostUsersHavOrders()
+        {
+
+            var orders =  db.Orders.GroupBy(o => o.AppUserId)
+                                    .Select(group => new {
+                                     userId = group.Key,
+                                     Count = group.Count()
+                                     })
+                                    .OrderByDescending(x => x.Count);
+
+            List<MostUsersHavOrdersDTO> getOrdersPerUserDTOs = new List<MostUsersHavOrdersDTO>();
+            foreach (var order in orders)
+            {
+                getOrdersPerUserDTOs.Add(new MostUsersHavOrdersDTO() 
+                {
+                    UserId = order.userId,
+                    Count = order.Count
+                });        
+            }
+            return getOrdersPerUserDTOs;
+        }
     }
 }

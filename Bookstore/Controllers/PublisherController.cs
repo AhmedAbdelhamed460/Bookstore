@@ -82,7 +82,7 @@ namespace Bookstore.Controllers
                         Name=dTO.name,
                         Location=dTO.location
                     };
-                    rep.Add(publisher);
+                    await rep.Add(publisher);
                     return Ok(publisher);
                 }
                 catch (Exception ex) { return BadRequest(ex.Message); }

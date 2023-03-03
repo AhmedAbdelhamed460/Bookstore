@@ -77,7 +77,7 @@ namespace Bookstore.Controllers
                         Id=dto.categoryId,
                         Name=dto.name
                     };
-                    rep.Add(category);
+                    await rep.Add(category);
                     return Ok(category);
                 }
                 catch (Exception ex) { return BadRequest(ex.Message); }
