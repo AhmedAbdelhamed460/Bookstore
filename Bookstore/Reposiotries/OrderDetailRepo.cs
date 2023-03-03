@@ -18,12 +18,12 @@ namespace Bookstore.Reposiotries
             await dbContext.orderDetails.AddAsync(orderDetail);
             await dbContext.SaveChangesAsync();
         }
-        public async Task<List<OrdersPerUserDTO>> getOrdersPerUser(string id)
+        public async Task<List<OrdersPerUserDTO>> getOrdersPerUser(string userId)
         { 
 
             var orderDetails = await (from o in dbContext.orderDetails
-                                where o.Order.AppUserId == id
-                                group o.bookId by o.orderId into g
+                                where o.Order.AppUserId == userId
+                                      group o.bookId by o.orderId into g
                                 select new { odrerId = g.Key, Books = g.ToList() }).ToListAsync();
 
             List<OrdersPerUserDTO> ordersPerUsers = new List<OrdersPerUserDTO>();

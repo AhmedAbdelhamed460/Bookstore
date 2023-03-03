@@ -2,6 +2,7 @@
 using Bookstore.Models;
 using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -14,19 +15,21 @@ namespace Bookstore.Controllers
         private readonly IOrderRep rep;
         private readonly IShopingCartrRepo shopingCartrRepo;
         private readonly IOrderDetailRepo orderDetailRepo;
-        private readonly IbooksRepo booksRepo;
+        private readonly IBookRepo bookRepo;
+        private readonly UserManager<AppUser> userManager;
 
-        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IbooksRepo booksRepo )
+        public OrderController(IOrderRep rep, IShopingCartrRepo shopingCartrRepo, IOrderDetailRepo orderDetailRepo, IBookRepo bookRepo, UserManager<AppUser> userManager)
         {
             this.rep = rep;
             this.shopingCartrRepo = shopingCartrRepo;
             this.orderDetailRepo = orderDetailRepo;
-            this.booksRepo = booksRepo;
+            this.bookRepo = bookRepo;
+            this.userManager = userManager;
         }
         [HttpGet]
-        public ActionResult getorders()
+        public async Task<ActionResult> getorders()
         {
-            List<Order> orders = rep.getOrders();
+            List<Order> orders =await rep.getOrders();
             List<OrderDTO> ordersDTO = new List<OrderDTO>();
             foreach(Order item in orders)
             {
@@ -46,7 +49,7 @@ namespace Bookstore.Controllers
 
 
         [HttpPost]
-        public ActionResult add(Order order)
+        public  ActionResult add(Order order)
         {
             Order o = rep.add(order);
             OrderDTO orderdto = new OrderDTO()
@@ -108,7 +111,7 @@ namespace Bookstore.Controllers
 
                     foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
                     {
-                        Book book = await booksRepo.getById(item.Key);
+                        Book book = await bookRepo.getById(item.Key);
                         OrderDetail orderDetail = new OrderDetail()
                         {
                             orderId = order.Id,
@@ -129,6 +132,26 @@ namespace Bookstore.Controllers
                 }
             }
             else return BadRequest();
+        }
+
+        [HttpGet("/api/MostUsersHavOrders")]
+        public async Task<ActionResult> getMostUsersHavOrders()
+        {
+            //List<Book> books = bookRepo.getBestSeller();
+
+            List<MostUsersHavOrdersDTO> mostUsersHavOrdersDTOs = rep.getMostUsersHavOrders();
+            List<AppUser> users = new List<AppUser>();
+            if (mostUsersHavOrdersDTOs != null)
+            {
+               foreach(var mostUserHavOrdersDTO in mostUsersHavOrdersDTOs)
+                {
+                    AppUser? user = await userManager.FindByIdAsync(mostUserHavOrdersDTO.UserId);
+
+                    users.Add(user);
+                }
+                return Ok(users);
+            }
+            else return NotFound();
         }
     }
 }
