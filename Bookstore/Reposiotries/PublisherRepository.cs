@@ -26,11 +26,18 @@ namespace Bookstore.Reposiotries
             return db.Publishers.Include(b => b.Books).FirstOrDefault(p => p.Name == name);
         }
 
+        public async Task<Publisher> Add(Publisher publisher)
+        {
+            await db.AddAsync(publisher);
+            db.SaveChanges();
+
+
         public Publisher Add(Publisher publisher)
         {
             db.Publishers.Add(publisher);
             db.SaveChanges();
             publisher=db.Publishers.Include(b=>b.Books).SingleOrDefault(d=>d.Id == publisher.Id);
+
             return publisher;
         }
 

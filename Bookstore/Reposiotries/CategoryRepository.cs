@@ -30,18 +30,25 @@ namespace Bookstore.Reposiotries
         }
 
         //add
+
+        public async Task<Category> Add(Category category)
+        {
+            await db.AddAsync(category);
+            db.SaveChanges();
+
         public Category Add(Category category)
         {
             db.Categorys.Add(category);
             db.SaveChanges();
             category = db.Categorys.Include(b => b.Books).SingleOrDefault(a => a.Id == category.Id);
+
             return category;
         }
 
         //update
-        public Category update(int id, Category category)
+        public Category update( Category category)
         {
-            db.Entry(category).State = EntityState.Modified;
+            db.Categorys.Update(category);
             db.SaveChanges();
             return category;
         }

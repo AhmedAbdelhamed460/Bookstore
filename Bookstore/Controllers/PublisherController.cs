@@ -90,6 +90,10 @@ namespace Bookstore.Controllers
                         name = p.Name,
                         location = p.Location
                     };
+
+                    rep.Add(publisher);
+                    return Ok(dTO);
+
                     foreach (Book b in p.Books)
                     {
                         publisherBookDTO.booksName.Add(b.Title);
@@ -99,6 +103,7 @@ namespace Bookstore.Controllers
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
+
                 }
             }
             else return BadRequest();
