@@ -53,11 +53,22 @@ namespace Bookstore.Reposiotries
             dbContext.Entry(shopingCart).State = EntityState.Modified;
             await dbContext.SaveChangesAsync();
         }
-        public async Task delete(int bookId)
+        public async Task delete(int bookId, string userId)
         {
-            ShopingCart? shopingCart = await dbContext.shopingCarts.SingleOrDefaultAsync(sc => sc.bookId == bookId);
+            ShopingCart? shopingCart = await dbContext.shopingCarts.SingleOrDefaultAsync(sc => sc.bookId == bookId && sc.AppUserId == userId);
             dbContext.shopingCarts.Remove(shopingCart);
             await dbContext.SaveChangesAsync();
+        }
+        public async Task deleteAll(string userId)
+        {
+           List<ShopingCart>? shopingCarts = await dbContext.shopingCarts.Where(sc => sc.AppUserId == userId).ToListAsync();
+
+            foreach(var shopingCart in shopingCarts)
+            {
+                dbContext.shopingCarts.Remove(shopingCart);
+                await dbContext.SaveChangesAsync();
+            }
+          
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Bookstore.Controllers
         [HttpGet]
         public async Task<ActionResult> getorders()
         {
-            List<Order> orders =await rep.getOrders();
+            List<Order> orders = await rep.getOrders();
             List<OrderDTO> ordersDTO = new List<OrderDTO>();
             foreach(Order item in orders)
             {

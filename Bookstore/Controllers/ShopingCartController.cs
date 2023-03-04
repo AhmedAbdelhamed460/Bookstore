@@ -3,6 +3,7 @@ using Bookstore.Models;
 using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Bookstore.Controllers
 {
@@ -111,5 +112,28 @@ namespace Bookstore.Controllers
             }
             else return BadRequest();
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> delete(int bookId, string userId)
+        {
+            if(bookId !=null && userId != null)
+            {
+                await shopingCartrRepo.delete(bookId, userId);
+                return Ok($"shoping card with bookId{bookId} and userId{userId} deleted");
+            }
+            else return BadRequest();
+
+        }
+        [HttpDelete("/api/deleteAllShopingCart")]
+        public async Task<IActionResult> deleteAll(string userId)
+        {
+            if (userId != null)
+            {
+                await shopingCartrRepo.deleteAll(userId);
+                return Ok($"All Shoping Card With UserId {userId} Deleted");
+            }
+            else return BadRequest();
+        }
+
     }
 }
