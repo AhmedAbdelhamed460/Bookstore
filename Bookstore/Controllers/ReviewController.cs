@@ -25,9 +25,9 @@ namespace Bookstore.Controllers
         [HttpGet("GetbyBookID")]
         public async Task<IActionResult> GetbyBookID(int bookID)
         {
-            List<Review> reviews = await _repo.getAll(bookID);
+            List<Review> reviews = await _repo.GetbyBookID(bookID);
             List<ReviewBook> reviewBooks = new List<ReviewBook>();
-            if (reviews == null)
+            if (reviews != null)
             {
                 foreach (Review item in reviews)
                 {
@@ -48,6 +48,35 @@ namespace Bookstore.Controllers
             }
             else { return BadRequest(); }
         }
+
+
+        [HttpGet("getAll")]
+        public async Task<IActionResult> getAll()
+        {
+            List<Review> reviews = await _repo.getAll();
+            List<ReviewBook> reviewBooks = new List<ReviewBook>();
+            if (reviews != null)
+            {
+                foreach (Review item in reviews)
+                {
+
+                    ReviewBook reviewBook = new ReviewBook()
+                    {
+                        bookID = item.bookID,
+                        Rateing = item.Rateing,
+                        Date = item.Date,
+                        ReviewText = item.ReviewText,
+                        UserName = $"{item.AppUser.firstName}{item.AppUser.LastName}",
+                        appUserId = item.appUserID
+
+                    };
+                    reviewBooks.Add(reviewBook);
+                }
+                return Ok(reviewBooks);
+            }
+            else { return BadRequest(); }
+        }
+
 
 
         [HttpGet("{id}")]
