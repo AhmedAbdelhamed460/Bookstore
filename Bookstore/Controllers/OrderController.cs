@@ -117,11 +117,13 @@ namespace Bookstore.Controllers
                             orderId = order.Id,
                             bookId = item.Key,
                             Quantity = item.Value,
-                            Price = book.Price
+                            //Price = book.Price * orderDetail.Quantity
   
-                        }; 
+                        };
+                        orderDetail.Price = book.Price * orderDetail.Quantity;
                         await orderDetailRepo.add(orderDetail);
                     }
+                    shopingCartrRepo.deleteAll(order.AppUserId);
                    
                     return Ok(userShopingCartDTO);
                 }
