@@ -114,7 +114,7 @@ namespace Bookstore.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> delete(int bookId, string userId)
+        public async Task<ActionResult> delete(int bookId, string userId)
         {
             if(bookId !=null && userId != null)
             {
@@ -125,14 +125,14 @@ namespace Bookstore.Controllers
 
         }
         [HttpDelete("/api/deleteAllShopingCart")]
-        public async Task<IActionResult> deleteAll(string userId)
+        public ActionResult deleteAll(string userId)
         {
             if (userId != null)
             {
-                await shopingCartrRepo.deleteAll(userId);
+                shopingCartrRepo.deleteAll(userId);
                 return Ok($"All Shoping Card With UserId {userId} Deleted");
             }
-            else return BadRequest();
+            else return BadRequest("Wron User Id");
         }
 
     }

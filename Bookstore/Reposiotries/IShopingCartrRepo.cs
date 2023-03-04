@@ -7,8 +7,8 @@ namespace Bookstore.Reposiotries
     {
         Task add(ShopingCart shopingCart);
         Task delete(int bookId, string userId);
-        Task deleteAll(string userId);
-
+        //Task deleteAll(string userId);
+        void deleteAll(string userId);
         Task edit(ShopingCart shopingCart);
         //Task<List<ShopingCart>> getByUserId(string userId);
         Task<UserShopingCartDTO> getByUserId(string userId);
