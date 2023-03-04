@@ -189,7 +189,7 @@ namespace Bookstore.Controllers
                     Book.Page = dTO.Page;
                     Book.poster = dTO.poster;
                     Book.PublisherDate = JsonConvert.DeserializeObject<DateTime>(@"""" + dTO.PublisherDate + @"""");
-                    boo.ArrivalDate = JsonConvert.DeserializeObject<DateTime>(@"""" + dTO.ArrivalDate + @"""");
+                    Book.ArrivalDate = JsonConvert.DeserializeObject<DateTime>(@"""" + dTO.ArrivalDate + @"""");
                     bookRepo.edit(Book);
                     return Ok(dTO);
                 }catch(Exception ex) { return BadRequest(ex.Message); }
