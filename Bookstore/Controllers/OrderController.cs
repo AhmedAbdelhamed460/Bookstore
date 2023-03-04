@@ -4,6 +4,7 @@ using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace Bookstore.Controllers
@@ -100,12 +101,12 @@ namespace Bookstore.Controllers
                     Order order = new Order()
                     {
                         Shopingcost = orderNowDTO.Shopingcost,
-                        ShopingDate = orderNowDTO.ShopingDate,
-                        ArrivalDate = orderNowDTO.ArrivalDate,
                         Discount = orderNowDTO.Discount,
                         AppUserId = orderNowDTO.UserId
-
                     };
+                    order.ShopingDate = JsonConvert.DeserializeObject<DateTime>(@"""" + orderNowDTO.ShopingDate + @"""");
+                    order.ArrivalDate = JsonConvert.DeserializeObject<DateTime>(@"""" + orderNowDTO.ArrivalDate + @"""");
+
                     order = rep.add(order);
 
                     List<ShopingCart> shopingCarts = await shopingCartrRepo.getByUserId(order.AppUserId);
