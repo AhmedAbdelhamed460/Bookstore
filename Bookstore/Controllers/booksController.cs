@@ -5,6 +5,7 @@ using Bookstore.Reposiotries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bookstore.Controllers
@@ -37,19 +38,24 @@ namespace Bookstore.Controllers
                 {
                     var book = new Book()
                     {
-                        ArrivalDate = dTO.ArrivalDate,
+                        //ArrivalDate = dTO.ArrivalDate,
                         authorID = dTO.AuthorID,
-                        Describtion = dTO.Description,
+                        Describtion = dTO.Describtion,
                         Title = dTO.Title,
                         Page = dTO.Page,
                         Price = dTO.Price,
                         categoryID = dTO.CategoryID,
                         publisherID = dTO.PublisherID,
-                        PublisherDate = dTO.PublisherDate,
+                        //PublisherDate = JsonConvert.SerializeObject(dTO.PublisherDate),
                         poster = dTO.poster,
+                        
                         MainCategory = dTO.MainCategory
                     };
-                   await bookRepo.add(book);
+
+                    book.PublisherDate = JsonConvert.DeserializeObject<DateTime>(@"""" + dTO.PublisherDate + @"""");
+                    book.ArrivalDate =  JsonConvert.DeserializeObject<DateTime>(@""""+ dTO.ArrivalDate+ @"""");
+
+                    await bookRepo.add(book);
                     await bookRepo.getById(book.Id);
                     var B = mapper.Map<BookDetailsDto>(book);
                     return Ok(B);
@@ -174,17 +180,16 @@ namespace Bookstore.Controllers
                 try
                 {
                     Book.MainCategory = dTO.MainCategory;
-                    Book.ArrivalDate = dTO.ArrivalDate;
                     Book.Title = dTO.Title;
                     Book.Price = dTO.Price;
                     Book.authorID = dTO.AuthorID;
                     Book.categoryID = dTO.CategoryID;
                     Book.publisherID = dTO.PublisherID;
-                    Book.Describtion = dTO.Description;
-                    Book.PublisherDate = dTO.PublisherDate;
+                    Book.Describtion = dTO.Describtion;
                     Book.Page = dTO.Page;
                     Book.poster = dTO.poster;
-
+                    Book.PublisherDate = JsonConvert.DeserializeObject<DateTime>(@"""" + dTO.PublisherDate + @"""");
+                    boo.ArrivalDate = JsonConvert.DeserializeObject<DateTime>(@"""" + dTO.ArrivalDate + @"""");
                     bookRepo.edit(Book);
                     return Ok(dTO);
                 }catch(Exception ex) { return BadRequest(ex.Message); }
@@ -217,7 +222,7 @@ namespace Bookstore.Controllers
                         Image = book.poster,
                         Price = book.Price,
                         Page = book.Page,
-                        PublisherDate = book.PublisherDate,
+                        //PublisherDate = book.PublisherDate,
                         Author = $"{book.Author.Firstname} {book.Author.Lastname}",
                         Category = book.Category.Name,
                         Publisher = book.Publisher.Name

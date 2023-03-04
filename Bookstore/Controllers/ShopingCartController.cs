@@ -39,11 +39,11 @@ namespace Bookstore.Controllers
                         poster = book.poster,
                         Price = book.Price,
                         Page = book.Page,
-                        PublisherDate = book.PublisherDate,
+                        //PublisherDate = book.PublisherDate,
                         //Author = $"{book.Author.Firstname} {book.Author.Lastname}",
                         AuthorFirstname = book.Author.Firstname,
                         AuthorLastname = book.Author.Lastname,
-                        ArrivalDate = book.ArrivalDate,
+                        //ArrivalDate = book.ArrivalDate,
                         CategoryName = book.Category.Name,
                         PublisherName = book.Publisher.Name,
                         Amount = shopingCart.Amount

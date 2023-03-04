@@ -1,6 +1,7 @@
 ﻿using Bookstore.DOT;
 using Bookstore.Models;
 using Bookstore.Reposiotries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Bookstore.Controllers
 {
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
@@ -20,6 +22,7 @@ namespace Bookstore.Controllers
         }
 
         [HttpPost]
+       
         public async Task<IActionResult> add( AuthorAddDto dto)
         {
             //using var dataStream = new MemoryStream();
@@ -45,6 +48,7 @@ namespace Bookstore.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> getALL()
         {
@@ -73,6 +77,8 @@ namespace Bookstore.Controllers
 
 
         //getbyid
+
+       // [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task <IActionResult> getById(int id)
         {
@@ -94,6 +100,7 @@ namespace Bookstore.Controllers
             return Ok(authorBookDTO);
         }
 
+        //[AllowAnonymous]
         [HttpGet("{name:alpha}")]
         public async Task<IActionResult> GetByName(string name)
         {
@@ -116,6 +123,7 @@ namespace Bookstore.Controllers
         }
 
         //delete
+
         [HttpDelete]
         public async Task< ActionResult> deleteAuthor(int id)
         {
