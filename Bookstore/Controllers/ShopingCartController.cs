@@ -20,18 +20,20 @@ namespace Bookstore.Controllers
         }
 
         [HttpGet]
+        //public async Task<ActionResult> getByUserId(string userId)
+
         public async Task<ActionResult> getByUserId(string userId)
         {
-            UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(userId);
+            List<ShopingCart> shopingCarts = await shopingCartrRepo.getByUserId(userId);
             List<ShopingCartBooksDTO> shopingCartBooksDTOs = new List<ShopingCartBooksDTO>();
-            if (userShopingCartDTO.UserId != null)
+            if (shopingCarts.Count != null)
             {
-                foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
+                foreach (var shopingCart in shopingCarts)
                 {
-                    Book book = await bookRepo.getById(item.Key);
+                    Book book = await bookRepo.getById(shopingCart.bookId);
                     shopingCartBooksDTOs.Add(new ShopingCartBooksDTO()
                     {
-                       
+                        Id = book.Id,
                         Title = book.Title,
                         Describtion = book.Describtion,
                         poster = book.poster,
@@ -44,13 +46,45 @@ namespace Bookstore.Controllers
                         ArrivalDate = book.ArrivalDate,
                         CategoryName = book.Category.Name,
                         PublisherName = book.Publisher.Name,
-                        Amount = item.Value
-                    }); 
+                        Amount = shopingCart.Amount
+                    });
                 }
-         
+
                 return Ok(shopingCartBooksDTOs);
             }
-            else return NotFound();    
+            else return NotFound();
+
+
+            //=======================================================================
+            //UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(userId);
+            //List<ShopingCartBooksDTO> shopingCartBooksDTOs = new List<ShopingCartBooksDTO>();
+            //if (userShopingCartDTO.UserId != null)
+            //{
+            //    foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
+            //    {
+            //        Book book = await bookRepo.getById(item.Key);
+            //        shopingCartBooksDTOs.Add(new ShopingCartBooksDTO()
+            //        {
+
+            //            Title = book.Title,
+            //            Describtion = book.Describtion,
+            //            poster = book.poster,
+            //            Price = book.Price,
+            //            Page = book.Page,
+            //            PublisherDate = book.PublisherDate,
+            //            //Author = $"{book.Author.Firstname} {book.Author.Lastname}",
+            //            AuthorFirstname = book.Author.Firstname,
+            //            AuthorLastname = book.Author.Lastname,
+            //            ArrivalDate = book.ArrivalDate,
+            //            CategoryName = book.Category.Name,
+            //            PublisherName = book.Publisher.Name,
+            //            Amount = item.Value
+            //        }); 
+            //    }
+
+            //    return Ok(shopingCartBooksDTOs);
+            //}
+            //else return NotFound();    
         }
 
         [HttpPost]

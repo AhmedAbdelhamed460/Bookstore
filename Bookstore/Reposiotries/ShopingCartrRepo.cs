@@ -19,20 +19,35 @@ namespace Bookstore.Reposiotries
         //    return await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).ToListAsync();
 
         //}
-        public async Task<UserShopingCartDTO> getByUserId(string userId)
+        public async Task<List<ShopingCart>> getByUserId(string userId)
         {
-            var shopingCarts = await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).Where(sc => sc.AppUserId == userId).GroupBy(sc=> sc.AppUserId).ToListAsync();
-                
-            UserShopingCartDTO userShopingCart = new UserShopingCartDTO();
-            foreach(var group in shopingCarts) 
-            {
-                userShopingCart.UserId = group.Key;
-                foreach(var shopingCart in group)
-                {
-                    userShopingCart.bookIdAmount.Add(shopingCart.bookId, shopingCart.Amount);
-                }
-            }
-            return (userShopingCart);
+
+            var shopingCarts = await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).Where(sc => sc.AppUserId == userId).ToListAsync();
+
+            //UserShopingCartDTO userShopingCart = new UserShopingCartDTO();
+            //foreach (var group in shopingCarts)
+            //{
+            //    userShopingCart.UserId = group.Key;
+            //    foreach (var shopingCart in group)
+            //    {
+            //        userShopingCart.bookIdAmount.Add(shopingCart.bookId, shopingCart.Amount);
+            //    }
+            //}
+            return (shopingCarts);
+
+            //=====================================================================================
+            //var shopingCarts = await dbContext.shopingCarts.Include(sc => sc.Book).Include(sc => sc.AppUser).Where(sc => sc.AppUserId == userId).GroupBy(sc=> sc.AppUserId).ToListAsync();
+
+            //UserShopingCartDTO userShopingCart = new UserShopingCartDTO();
+            //foreach(var group in shopingCarts) 
+            //{
+            //    userShopingCart.UserId = group.Key;
+            //    foreach(var shopingCart in group)
+            //    {
+            //        userShopingCart.bookIdAmount.Add(shopingCart.bookId, shopingCart.Amount);
+            //    }
+            //}
+            //return (userShopingCart);
 
         }
         public async Task<ShopingCart> getByUserIdBookID(string userId ,int bookId)
