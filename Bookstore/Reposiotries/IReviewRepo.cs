@@ -8,7 +8,9 @@ namespace Bookstore.Reposiotries
         Review EditReview(Review review);
         Review DeleteReview (Review review);
         Task<Review?> GetbyId(int id);
-        Task<List<Review>> getAll(int bookID);
+        Task<List<Review>> getAll();
+        Task<List<Review>> GetbyBookID(int bookID);
+
 
 
     }

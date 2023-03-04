@@ -1,5 +1,6 @@
 ﻿using Bookstore.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Bookstore.Reposiotries
 {
@@ -33,13 +34,23 @@ namespace Bookstore.Reposiotries
             return review;
         }
 
-        public async Task<List<Review>> getAll(int bookID)
+        public async Task<List<Review>> GetbyBookID(int bookID)
         {
             return await _dbContext.Reviews.Where(n => n.bookID == bookID)
                 .OrderBy(n => n.Rateing)
                 .Include(n=>n.Book).Include(n => n.AppUser)
                 .ToListAsync();
         }
+
+        public async Task<List<Review>> getAll()
+        {
+            return await _dbContext.Reviews
+               .OrderBy(n => n.Rateing)
+               .Include(n => n.Book).Include(n => n.AppUser)
+               .ToListAsync();
+        }
+
+       
 
         public async Task<Review?> GetbyId(int id)
         {
