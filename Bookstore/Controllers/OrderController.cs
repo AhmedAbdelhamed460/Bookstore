@@ -107,25 +107,42 @@ namespace Bookstore.Controllers
 
                     };
                     order = rep.add(order);
-                    UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(order.AppUserId);
 
-                    foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
+                    List<ShopingCart> shopingCarts = await shopingCartrRepo.getByUserId(order.AppUserId);
+
+                    foreach (var shopingCart in shopingCarts)
                     {
-                        Book book = await bookRepo.getById(item.Key);
+                        Book book = await bookRepo.getById(shopingCart.bookId);
                         OrderDetail orderDetail = new OrderDetail()
                         {
                             orderId = order.Id,
-                            bookId = item.Key,
-                            Quantity = item.Value,
+                            bookId = shopingCart.bookId,
+                            Quantity =shopingCart.Amount,
                             //Price = book.Price * orderDetail.Quantity
-  
+
                         };
                         orderDetail.Price = book.Price * orderDetail.Quantity;
                         await orderDetailRepo.add(orderDetail);
                     }
+                    //UserShopingCartDTO userShopingCartDTO = await shopingCartrRepo.getByUserId(order.AppUserId);
+
+                    //foreach (KeyValuePair<int, int> item in userShopingCartDTO.bookIdAmount)
+                    //{
+                    //    Book book = await bookRepo.getById(item.Key);
+                    //    OrderDetail orderDetail = new OrderDetail()
+                    //    {
+                    //        orderId = order.Id,
+                    //        bookId = item.Key,
+                    //        Quantity = item.Value,
+                    //        //Price = book.Price * orderDetail.Quantity
+
+                    //    };
+                    //    orderDetail.Price = book.Price * orderDetail.Quantity;
+                    //    await orderDetailRepo.add(orderDetail);
+                    //}
                     shopingCartrRepo.deleteAll(order.AppUserId);
                    
-                    return Ok(userShopingCartDTO);
+                    return Ok($"order {order.Id} is done");
                 }
                 catch (Exception ex)
                 {
